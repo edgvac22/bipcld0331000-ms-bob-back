@@ -5,7 +5,7 @@ import { DatabaseService } from './db/db.service';
 
 @Injectable()
 export class IssueService {
-  TABLE_NAME = 'BobTable';
+  TABLE_NAME = 'bob-dev';
 
   constructor(private dbService: DatabaseService) {}
   
