@@ -6,7 +6,7 @@ import { DatabaseService } from '../db/db.service';
 @Injectable()
 export class SolutionService {
     TABLE_NAME = 'bob';
-    constructor(private dbService: DatabaseService) {}
+    constructor(private dbService: DatabaseService) { }
 
     async addSolution(issueId: string, addSolutionDto: AddSolutionDto) {
         const solutionObject = {
@@ -47,6 +47,27 @@ export class SolutionService {
                 messageType: `OK Request`,
                 message: `Solution created successfully.`,
                 detail: solutionObject,
+            };
+        } catch (err) {
+            throw new InternalServerErrorException(err);
+        }
+    }
+
+    async listSolution() {
+        try {
+            return {
+                message: 'Retrieved successfully',
+                data: await this.dbService
+                    .connect()
+                    .query({
+                        TableName: this.TABLE_NAME,
+                        IndexName: "verify-index",
+                        KeyConditionExpression: "verify = :v_solution",
+                        ExpressionAttributeValues: {
+                            ":v_solution": "yes"
+                        },
+                    })
+                    .promise(),
             };
         } catch (err) {
             throw new InternalServerErrorException(err);
