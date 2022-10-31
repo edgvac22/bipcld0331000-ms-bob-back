@@ -21,4 +21,9 @@ export class SolutionController {
   updateSolution(@Param('issueId') issueId: string, @Body() updateSolutionDto: UpdateSolutionDto) {
     return this.solutionService.updateSolution(issueId, updateSolutionDto);
   }
+
+  @Put(':issueId/remove')
+  removeSolution(@Param('issueId') issueId: string) {
+    return this.solutionService.removeSolution(issueId);
+  }
 }

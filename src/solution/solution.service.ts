@@ -112,4 +112,38 @@ export class SolutionService {
             throw new InternalServerErrorException(err);
         }
     }
+
+    async removeSolution(issueId: string) {
+        const solutionObject = {
+            verify: "obs",
+            dateDeleted: Date()
+        };
+        try {
+            await this.dbService
+                .connect()
+                .update({
+                    TableName: this.TABLE_NAME,
+                    Key: { issueId },
+                    UpdateExpression:
+                        'SET #ve = :ve, #dd = :dd REMOVE solutionId, solutionUser, solutionTitle, solutionDetail, solutionAttachment, dateUpdated',
+                    ExpressionAttributeNames: {
+                        "#ve": "verify",
+                        "#dd": "dateDeleted"
+                    },
+                    ExpressionAttributeValues: {
+                        ":ve": solutionObject.verify,
+                        ":dd": solutionObject.dateDeleted
+                    },
+                })
+                .promise();
+            return {
+                statusCode: 201,
+                messageType: `OK Request`,
+                message: `Solution deleted successfully.`,
+                detail: solutionObject,
+            };
+        } catch (err) {
+            throw new InternalServerErrorException(err);
+        }
+    }
 }
