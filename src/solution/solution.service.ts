@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { AddSolutionDto } from './dto/add-solution.dto';
 import { v4 as uuid } from "uuid";
 import { DatabaseService } from '../db/db.service';
+import { UpdateSolutionDto } from './dto/update-solution.dto';
 
 @Injectable()
 export class SolutionService {
@@ -68,6 +69,44 @@ export class SolutionService {
                         },
                     })
                     .promise(),
+            };
+        } catch (err) {
+            throw new InternalServerErrorException(err);
+        }
+    }
+
+    async updateSolution(issueId: string, updateSolutionDto: UpdateSolutionDto) {
+        const solutionObject = {
+            dateUpdated: Date(),
+            ...updateSolutionDto,
+        };
+        try {
+            await this.dbService
+                .connect()
+                .update({
+                    TableName: this.TABLE_NAME,
+                    Key: { issueId },
+                    UpdateExpression:
+                        'SET #st = :st, #sa = :sa, #sd = :sd, #du = :du',
+                    ExpressionAttributeNames: {
+                        "#st": "solutionTitle",
+                        "#sa": "solutionAttachment",
+                        "#sd": "solutionDetail",
+                        "#du": "dateUpdated"
+                    },
+                    ExpressionAttributeValues: {
+                        ":st": solutionObject.solutionTitle,
+                        ":sa": solutionObject.solutionAttachment,
+                        ":sd": solutionObject.solutionDetail,
+                        ":du": solutionObject.dateUpdated
+                    },
+                })
+                .promise();
+            return {
+                statusCode: 201,
+                messageType: `OK Request`,
+                message: `Solution updated successfully.`,
+                detail: solutionObject,
             };
         } catch (err) {
             throw new InternalServerErrorException(err);
