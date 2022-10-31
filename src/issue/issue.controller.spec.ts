@@ -1,6 +1,5 @@
 import { Test } from '@nestjs/testing';
 import { DatabaseService } from '../db/db.service';
-import { Issue } from './interfaces/issue.interface';
 import { IssueController } from './issue.controller';
 import { IssueService } from './issue.service';
 
@@ -20,12 +19,6 @@ describe('IssueController', () => {
     issueService = moduleRef.get<IssueService>(IssueService);
     databaseService = moduleRef.get<DatabaseService>(DatabaseService);
     issueController = moduleRef.get<IssueController>(IssueController);
-  });
-
-  describe('Interface', () => {
-    it('Cat should be defined', async () => {
-      expect(Issue).toBeDefined();
-    });
   });
 
   describe('Controller', () => {
