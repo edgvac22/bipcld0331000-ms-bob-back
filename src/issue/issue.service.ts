@@ -29,13 +29,7 @@ export class IssueService {
         detail: issueObject,
       };
     } catch (err) {
-      return {
-        statusCode: 400,
-        messageType: `Bad Request`,
-        errorCode: `BOBSW01`,
-        errorMessage: `ERROR issue`,
-        detail: `ERROR createIssue function`
-      };
+      throw new InternalServerErrorException(err);
     }
   }
 
