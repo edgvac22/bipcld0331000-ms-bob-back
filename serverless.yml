@@ -1,8 +1,6 @@
 service: ingsw-nestjs-dynamodb-api-rest
 
 plugins:
-  - serverless-iam-roles-per-function
-  - serverless-dynamodb-local
   - serverless-offline
 
 configValidationMode: warn
@@ -21,87 +19,9 @@ functions:
     handler: dist/serverless.handler
     events:
       - http:
-          method: ANY
-          path: /
-      - http:
-          method: ANY
-          path: '{proxy+}'
-
-resources: 
-  Resources: 
-    BobTable: 
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: bob-dev
-        AttributeDefinitions: 
-          - 
-            AttributeName: issueId
-            AttributeType: S
-          - 
-            AttributeName: verify
-            AttributeType: S
-          - 
-            AttributeName: solutionId
-            AttributeType: S
-        KeySchema: 
-          - 
-            AttributeName: issueId
-            KeyType: HASH
-        GlobalSecondaryIndexes : [
-          {
-          IndexName : "verify-index",
-          KeySchema : [
-            {
-              AttributeName : "verify",
-              KeyType : "HASH"
-            },
-          ],                         
-          Projection : {
-            ProjectionType: "ALL"
-          },
-          ProvisionedThroughput: {
-            ReadCapacityUnits: 25,
-            WriteCapacityUnits: 25 
-          },
-          },
-          {
-          IndexName : "solutionId-index",
-          KeySchema : [
-            {
-              AttributeName : "solutionId",
-              KeyType : "HASH"
-            },
-          ],                         
-          Projection : {
-            NonKeyAttributes : ["area","environment","solutionUser","solutionTitle", "solutionDetail","solutionAttachment","dateUpdated"],
-            ProjectionType: "INCLUDE"
-          },
-          ProvisionedThroughput: {
-            ReadCapacityUnits: 25,
-            WriteCapacityUnits: 25 
-          },
-          }]
-        ProvisionedThroughput: 
-          ReadCapacityUnits: 25
-          WriteCapacityUnits: 25 
+          method: any
+          path: /{any+}
 
 custom: 
-  esbuild: 
-    bundle: true
-    minify: false
-    sourcemap: true
-    exclude: aws-sdk
-    target: node16
-    define: 'require.resolve: undefined'
-    platform: node
-    concurrency: 10
-
-  dynamodb: 
-    start: 
-      port: 8000
-      inMemory: true
-      migrate: true
-
-    stages: dev
   endpoints:
-      dynamodbURL: 'http://localhost:8000'
+    dynamodbURL: 'http://localhost:8000'

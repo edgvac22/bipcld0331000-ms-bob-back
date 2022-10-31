@@ -6,7 +6,7 @@ export class DatabaseService {
   connect(): AWS.DynamoDB.DocumentClient {
     return process.env.IS_OFFLINE
       ? new AWS.DynamoDB.DocumentClient({
-          region: 'localhost',
+          region: process.env.REGION,
           endpoint: process.env.DYNAMODB_ENDPOINT,
         })
       : new AWS.DynamoDB.DocumentClient();

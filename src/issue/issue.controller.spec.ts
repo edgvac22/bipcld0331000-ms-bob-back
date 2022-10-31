@@ -1,38 +1,36 @@
 import { Test } from '@nestjs/testing';
+import { DatabaseService } from '../db/db.service';
+import { Issue } from './interfaces/issue.interface';
 import { IssueController } from './issue.controller';
 import { IssueService } from './issue.service';
-import { CreateIssueDto } from './dto/create-issue.dto';
 
 describe('IssueController', () => {
   let issueController: IssueController;
   let issueService: IssueService;
+  let databaseService: DatabaseService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       controllers: [IssueController],
-      providers: [IssueService],
+      providers: [IssueService, DatabaseService],
     }).compile();
 
     issueService = await moduleRef.resolve(IssueService);
 
     issueService = moduleRef.get<IssueService>(IssueService);
+    databaseService = moduleRef.get<DatabaseService>(DatabaseService);
     issueController = moduleRef.get<IssueController>(IssueController);
   });
 
-  describe('create', () => {
-    it('should create an issue', async () => {
-      const createIssueDto: CreateIssueDto = {
-        issueUser: "mmoreno",
-        area: "Devops",
-        environment: "Produccion",
-        issueDetail: "Tengo un error en AWS en produccion",
-        issueAttachment: [
-            "error-produccion.png"
-            ],
-        dateCreate: "022-09-28:13:27:41",
-        verify: "no",
-      };
-      expect(await issueController.create(createIssueDto)).toBeDefined();
+  describe('Interface', () => {
+    it('Cat should be defined', async () => {
+      expect(Issue).toBeDefined();
+    });
+  });
+
+  describe('Controller', () => {
+    it('Controller should be defined', async () => {
+      expect(IssueController).toBeDefined();
     });
   });
 });

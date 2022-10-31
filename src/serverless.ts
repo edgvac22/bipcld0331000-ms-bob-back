@@ -10,7 +10,7 @@ import { Server } from 'http';
 
 let server: Server;
 
-async function createExpressApp(
+export async function createExpressApp(
   expressApp: Express,
 ): Promise<INestApplication> {
   const app = await NestFactory.create(
@@ -20,7 +20,7 @@ async function createExpressApp(
   return app;
 }
 
-async function bootstrap() {
+export async function bootstrap() {
   const expressApp = express();
   const app = await createExpressApp(expressApp);
   await app.init();
