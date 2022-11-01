@@ -26,4 +26,9 @@ export class SolutionController {
   removeSolution(@Param('issueId') issueId: string) {
     return this.solutionService.removeSolution(issueId);
   }
+
+  @Get(':solutionId')
+  detailIssue(@Param('solutionId') solutionId: string) {
+    return this.solutionService.detailIssue(solutionId);
+  }
 }

@@ -146,4 +146,25 @@ export class SolutionService {
             throw new InternalServerErrorException(err);
         }
     }
+
+    async detailIssue(solutionId: string) {
+        try {
+            return {
+                message: 'Retrieved successfully',
+                data: await this.dbService
+                    .connect()
+                    .query({
+                        TableName: this.TABLE_NAME,
+                        IndexName: "solutionId-index",
+                        KeyConditionExpression: "solutionId = :v_solutionId",
+                        ExpressionAttributeValues: {
+                            ":v_solutionId": solutionId
+                        },
+                    })
+                    .promise(),
+            };
+        } catch (err) {
+            throw new InternalServerErrorException(err);
+        }
+    }
 }
