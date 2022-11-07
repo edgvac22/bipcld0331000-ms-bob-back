@@ -77,5 +77,5 @@ $ npm run build
 ## Correr la aplicación
 
 ```bash
-$ serverless offline start
+$ npm run local
 ```
