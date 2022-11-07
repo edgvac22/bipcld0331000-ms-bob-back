@@ -7,12 +7,13 @@ import { UpdateSolutionDto } from './dto/update-solution.dto';
 @Injectable()
 export class SolutionService {
     TABLE_NAME = 'bob';
-    constructor(private dbService: DatabaseService) { }
+    constructor(private dbService: DatabaseService) {}
 
     async addSolution(issueId: string, addSolutionDto: AddSolutionDto) {
         const solutionObject = {
             solutionId: uuid(),
             dateUpdated: Date(),
+            verify: "yes",
             ...addSolutionDto,
         };
         try {

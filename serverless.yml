@@ -1,6 +1,7 @@
 service: ingsw-nestjs-dynamodb-api-rest
 
 plugins:
+  - serverless-iam-roles-per-function
   - serverless-offline
 
 configValidationMode: warn
@@ -15,12 +16,47 @@ provider:
     DYNAMODB_ENDPOINT: ${self:custom.endpoints.dynamodbURL}
 
 functions:
- app: 
+  putItem: 
     handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: 'arn:aws:dynamodb:ddblocal:000000000000:table/bob'
     events:
       - http:
-          method: any
-          path: /{any+}
+          method: post
+          path: /issue/new
+      - http:
+          method: post
+          path: /issue
+      - http:
+          method: post
+          path: /solution/{issueId}/new
+      - http:
+          method: put
+          path: /solution/{issueId}/update
+      - http:
+          method: put
+          path: /solution/{issueId}/remove
+
+  getItem: 
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+        Resource: 'arn:aws:dynamodb:ddblocal:000000000000:table/bob'
+    events:
+      - http:
+          method: get
+          path: /issue/list
+      - http:
+          method: get
+          path: /solution/list
+      - http:
+          method: get
+          path: /solution/{solutionId}
 
 custom: 
   endpoints:

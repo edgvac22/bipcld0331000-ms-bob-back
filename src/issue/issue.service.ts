@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import { DatabaseService } from '../db/db.service';
 
 @Injectable()
-export class IssueService {
+ export class IssueService {
   TABLE_NAME = 'bob';
   constructor(private dbService: DatabaseService) { }
 
@@ -12,10 +12,11 @@ export class IssueService {
     const issueObject = {
       issueId: uuid(),
       dateCreate: Date(),
+      verify: "no",
       ...createIssueDto,
     };
     try {
-      await this.dbService
+       await this.dbService
         .connect()
         .put({
           TableName: this.TABLE_NAME,
@@ -45,6 +46,30 @@ export class IssueService {
             KeyConditionExpression: "verify = :v_solution",
             ExpressionAttributeValues: {
               ":v_solution": "no"
+            },
+          })
+          .promise(),
+      };
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
+  }
+
+  async searchIssue(solutionDetail: string) {
+    console.log(solutionDetail);
+    try {
+      return {
+        message: 'Retrieved successfully',
+        data: await this.dbService
+          .connect()
+          .scan({
+            TableName: this.TABLE_NAME,
+            FilterExpression: "contains(#solutionDetail, :solutionDetail)",
+            ExpressionAttributeNames:  {
+              "#solutionDetail": "solutionDetail"
+            },
+            ExpressionAttributeValues: {
+              ":solutionDetail": solutionDetail
             },
           })
           .promise(),

@@ -4,5 +4,4 @@ export class CreateIssueDto {
   environment: string;
   issueDetail: string;
   issueAttachment: object;
-  verify: string;
 }
