@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateIssueDto } from './dto/create-issue.dto';
 import { v4 as uuid } from "uuid";
 import { DatabaseService } from '../db/db.service';
+import { SearchIssueDto } from './dto/search-issue.dto';
 
 @Injectable()
  export class IssueService {
@@ -55,21 +56,23 @@ import { DatabaseService } from '../db/db.service';
     }
   }
 
-  async searchIssue(solutionDetail: string) {
-    console.log(solutionDetail);
+  async searchIssue(searchIssueDto: SearchIssueDto) {
     try {
       return {
         message: 'Retrieved successfully',
         data: await this.dbService
           .connect()
-          .scan({
+          .query({
             TableName: this.TABLE_NAME,
+            IndexName: "verify-index",
+            KeyConditionExpression: "verify = :v_solution",
             FilterExpression: "contains(#solutionDetail, :solutionDetail)",
             ExpressionAttributeNames:  {
-              "#solutionDetail": "solutionDetail"
+              "#solutionDetail": "solutionDetail",
             },
             ExpressionAttributeValues: {
-              ":solutionDetail": solutionDetail
+              ":solutionDetail": searchIssueDto.solutionDetail,
+              ":v_solution": "yes"
             },
           })
           .promise(),
