@@ -71,7 +71,7 @@ import { SearchIssueDto } from './dto/search-issue.dto';
               "#solutionDetail": "solutionDetail",
             },
             ExpressionAttributeValues: {
-              ":solutionDetail": searchIssueDto.solutionDetail,
+              ":solutionDetail": searchIssueDto.detailIssue,
               ":v_solution": "yes"
             },
           })
