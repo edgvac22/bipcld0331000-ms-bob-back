@@ -2,7 +2,7 @@ import { IsString, IsOptional, MinLength, IsDefined, IsArray } from 'class-valid
 
 export class CreateIssueDto {
   @IsDefined({
-    message: 'El campo issueUser debe estar definido.'
+    message: 'El usuario que creo el Hallazgo debe estar definido.'
   })
   @IsString({
     message: 'El usuario que creo el Hallazgo debe ser cadena o string.',
@@ -10,7 +10,7 @@ export class CreateIssueDto {
   issueUser: string;
 
   @IsDefined({
-    message: 'El campo area debe estar definido.',
+    message: 'El Área de TI debe estar definido.',
   })
   @IsString({
     message: 'El Área de TI debe ser cadena o string.',
@@ -18,7 +18,7 @@ export class CreateIssueDto {
   area: string;
 
   @IsDefined({
-    message: 'El campo environment debe estar definido.'
+    message: 'El ambiente de desarrollo debe estar definido.'
   })
   @IsString({
     message: 'El ambiente de desarrollo debe ser cadena o string.',
@@ -26,7 +26,7 @@ export class CreateIssueDto {
   environment: string;
 
   @IsDefined({
-    message: 'El campo issueDetail debe estar definido.',
+    message: 'El detalle del Hallazgo debe estar definido.',
   })
   @IsString({
     message: 'El detalle del Hallazgo debe ser cadena o string.',

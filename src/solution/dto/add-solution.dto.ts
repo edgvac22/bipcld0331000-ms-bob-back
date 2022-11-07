@@ -1,11 +1,17 @@
-import { IsString, IsArray, IsOptional, MinLength } from 'class-validator';
+import { IsString, IsArray, IsOptional, MinLength, IsDefined } from 'class-validator';
 
 export class AddSolutionDto {
+  @IsDefined({
+    message: 'El usuario que creo la Solución debe estar definido.'
+  })
   @IsString({
     message: 'El usuario que creo la Solución debe ser cadena o string.',
   })
   solutionUser: string;
 
+  @IsDefined({
+    message: 'El título de la Solución debe estar definido.'
+  })
   @IsString({
     message: 'El título de la Solución debe ser cadena o string.',
   })
@@ -20,6 +26,9 @@ export class AddSolutionDto {
   @IsOptional()
   solutionAttachment: object;
 
+  @IsDefined({
+    message: 'El detalle de la Solución debe estar definido.'
+  })
   @IsString({
     message: 'El detalle de la Solución debe ser cadena o string.',
   })

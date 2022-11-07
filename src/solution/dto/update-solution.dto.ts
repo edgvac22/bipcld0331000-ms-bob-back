@@ -1,6 +1,9 @@
-import { IsString, IsArray, IsOptional, MinLength } from 'class-validator';
+import { IsString, IsArray, IsDefined, IsOptional, MinLength } from 'class-validator';
 
 export class UpdateSolutionDto {
+  @IsDefined({
+    message: 'El título de la Solución debe estar definido.'
+  })
   @IsString({
     message: 'El detalle de la Solución debe ser cadena o string.',
   })
@@ -15,6 +18,9 @@ export class UpdateSolutionDto {
   @IsOptional()
   solutionAttachment: object;
 
+  @IsDefined({
+    message: 'El detalle de la Solución debe estar definido.'
+  })
   @IsString({
     message: 'El detalle de la Solución debe ser cadena o string.',
   })
