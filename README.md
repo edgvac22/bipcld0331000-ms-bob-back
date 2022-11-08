@@ -15,7 +15,7 @@ Se debe agregar la plantilla `bob-dev.yml` en el CloudFormation
 
 ## Crear archivo .env
 
-Se debe crear el archivo con los siguientes valores dentro de la carpeta src/
+Se debe crear el archivo .env dentro de la carpeta src/
 ```
 BOB_TABLE = 'nombreDeTuTabla'
 ```
@@ -40,7 +40,7 @@ Remover de la aplicación en sandbox
 `npm run remove`
 
 ## Contribute
-Desarrollado por ingenieria de Software Banistmo
+Desarrollado por Ingenieria de Software Banistmo
 
 Para conocer mas de Ingeniería de Software puedes ingresar a nuestra wiki:
 - [Ingeniería de Software](https://dev.azure.com/banistmo/VP%20Servicios%20Corporativos/_wiki/wikis/VP-Servicios-Corporativos.wiki/2806/6.-Ingenier%C3%ADa-de-Software)
