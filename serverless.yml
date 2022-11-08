@@ -1,19 +1,30 @@
-service: ingsw-nestjs-dynamodb-api-rest
+service: ingsw-bob-api-rest
 
 plugins:
   - serverless-iam-roles-per-function
-  - serverless-offline
+# - serverless-offline
+  - serverless-prune-plugin
+
+custom:
+  prune:
+    automatic: true
+    number: 3
 
 configValidationMode: warn
 
 provider:
   name: aws
   runtime: nodejs16.x
-  stage: dev
-  region: us-east-1
+  stage: ${opt:stage}
+  region: ${opt:region}
   timeout: 30
-  environment: 
-    DYNAMODB_ENDPOINT: ${self:custom.endpoints.dynamodbURL}
+  deploymentBucket:
+    name: aws${opt:geoloc,'useast1'}-${opt:stage}${opt:proyecto,'ingsw'}serverless
+  environment:
+    BOB_TABLE: aws${opt:geoloc,'useast1'}-${opt:stage}${opt:acct,'cpi'}dbo${opt:proyecto,'ingsw'}-bob
+  apiGateway:
+    apiKeys:
+      - ${opt:proyecto,'ingsw'}-${opt:stage}-api-key  
 
 functions:
   putItem: 
@@ -22,7 +33,7 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
-        Resource: 'arn:aws:dynamodb:ddblocal:000000000000:table/bob'
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}'
     events:
       - http:
           method: post
@@ -32,13 +43,13 @@ functions:
           path: /issue
       - http:
           method: post
-          path: /solution/{issueId}/new
+          path: /solution/new/{issueId}
       - http:
           method: put
-          path: /solution/{issueId}/update
+          path: /solution/update/{issueId}
       - http:
           method: put
-          path: /solution/{issueId}/remove
+          path: /solution/remove/{issueId}
 
   getItem: 
     handler: dist/serverless.handler
@@ -46,7 +57,7 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:GetItem
-        Resource: 'arn:aws:dynamodb:ddblocal:000000000000:table/bob'
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}'
     events:
       - http:
           method: get
@@ -57,7 +68,3 @@ functions:
       - http:
           method: get
           path: /solution/{solutionId}
-
-custom: 
-  endpoints:
-    dynamodbURL: 'http://localhost:8000'

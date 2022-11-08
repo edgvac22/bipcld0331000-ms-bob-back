@@ -6,7 +6,6 @@ import { UpdateSolutionDto } from './dto/update-solution.dto';
 
 @Injectable()
 export class SolutionService {
-    TABLE_NAME = 'bob';
     constructor(private dbService: DatabaseService) {}
 
     async addSolution(issueId: string, addSolutionDto: AddSolutionDto) {
@@ -17,33 +16,31 @@ export class SolutionService {
             ...addSolutionDto,
         };
         try {
-            await this.dbService
-                .connect()
-                .update({
-                    TableName: this.TABLE_NAME,
-                    Key: { issueId },
-                    UpdateExpression:
-                        'SET #ve = :ve, #id = :id, #su = :su, #st = :st, #sa = :sa, #sd = :sd, #du = :du',
-                    ExpressionAttributeNames: {
-                        "#ve": "verify",
-                        "#id": "solutionId",
-                        "#su": "solutionUser",
-                        "#st": "solutionTitle",
-                        "#sa": "solutionAttachment",
-                        "#sd": "solutionDetail",
-                        "#du": "dateUpdated"
-                    },
-                    ExpressionAttributeValues: {
-                        ":ve": solutionObject.verify,
-                        ":id": solutionObject.solutionId,
-                        ":su": solutionObject.solutionUser,
-                        ":st": solutionObject.solutionTitle,
-                        ":sa": solutionObject.solutionAttachment,
-                        ":sd": solutionObject.solutionDetail,
-                        ":du": solutionObject.dateUpdated
-                    },
-                })
-                .promise();
+            const params = {
+                TableName: process.env.BOB_TABLE,
+                Key: { issueId },
+                UpdateExpression:
+                    'SET #ve = :ve, #id = :id, #su = :su, #st = :st, #sa = :sa, #sd = :sd, #du = :du',
+                ExpressionAttributeNames: {
+                    "#ve": "verify",
+                    "#id": "solutionId",
+                    "#su": "solutionUser",
+                    "#st": "solutionTitle",
+                    "#sa": "solutionAttachment",
+                    "#sd": "solutionDetail",
+                    "#du": "dateUpdated"
+                },
+                ExpressionAttributeValues: {
+                    ":ve": solutionObject.verify,
+                    ":id": solutionObject.solutionId,
+                    ":su": solutionObject.solutionUser,
+                    ":st": solutionObject.solutionTitle,
+                    ":sa": solutionObject.solutionAttachment,
+                    ":sd": solutionObject.solutionDetail,
+                    ":du": solutionObject.dateUpdated
+                },
+            };
+            await this.dbService.documentClient.update(params).promise();
             return {
                 statusCode: 201,
                 messageType: `OK Request`,
@@ -57,19 +54,17 @@ export class SolutionService {
 
     async listSolution() {
         try {
+            const params = {
+                TableName: process.env.BOB_TABLE,
+                IndexName: "verify-index",
+                KeyConditionExpression: "verify = :v_solution",
+                ExpressionAttributeValues: {
+                    ":v_solution": "yes"
+                },
+            };
             return {
                 message: 'Retrieved successfully',
-                data: await this.dbService
-                    .connect()
-                    .query({
-                        TableName: this.TABLE_NAME,
-                        IndexName: "verify-index",
-                        KeyConditionExpression: "verify = :v_solution",
-                        ExpressionAttributeValues: {
-                            ":v_solution": "yes"
-                        },
-                    })
-                    .promise(),
+                data: await this.dbService.documentClient.query(params).promise(),
             };
         } catch (err) {
             throw new InternalServerErrorException(err);
@@ -82,27 +77,25 @@ export class SolutionService {
             ...updateSolutionDto,
         };
         try {
-            await this.dbService
-                .connect()
-                .update({
-                    TableName: this.TABLE_NAME,
-                    Key: { issueId },
-                    UpdateExpression:
-                        'SET #st = :st, #sa = :sa, #sd = :sd, #du = :du',
-                    ExpressionAttributeNames: {
-                        "#st": "solutionTitle",
-                        "#sa": "solutionAttachment",
-                        "#sd": "solutionDetail",
-                        "#du": "dateUpdated"
-                    },
-                    ExpressionAttributeValues: {
-                        ":st": solutionObject.solutionTitle,
-                        ":sa": solutionObject.solutionAttachment,
-                        ":sd": solutionObject.solutionDetail,
-                        ":du": solutionObject.dateUpdated
-                    },
-                })
-                .promise();
+            const params = {
+                TableName: process.env.BOB_TABLE,
+                Key: { issueId },
+                UpdateExpression:
+                    'SET #st = :st, #sa = :sa, #sd = :sd, #du = :du',
+                ExpressionAttributeNames: {
+                    "#st": "solutionTitle",
+                    "#sa": "solutionAttachment",
+                    "#sd": "solutionDetail",
+                    "#du": "dateUpdated"
+                },
+                ExpressionAttributeValues: {
+                    ":st": solutionObject.solutionTitle,
+                    ":sa": solutionObject.solutionAttachment,
+                    ":sd": solutionObject.solutionDetail,
+                    ":du": solutionObject.dateUpdated
+                },
+            };
+            await this.dbService.documentClient.update(params).promise();
             return {
                 statusCode: 201,
                 messageType: `OK Request`,
@@ -120,23 +113,21 @@ export class SolutionService {
             dateDeleted: Date()
         };
         try {
-            await this.dbService
-                .connect()
-                .update({
-                    TableName: this.TABLE_NAME,
-                    Key: { issueId },
-                    UpdateExpression:
-                        'SET #ve = :ve, #dd = :dd REMOVE solutionId, solutionUser, solutionTitle, solutionDetail, solutionAttachment, dateUpdated',
-                    ExpressionAttributeNames: {
-                        "#ve": "verify",
-                        "#dd": "dateDeleted"
-                    },
-                    ExpressionAttributeValues: {
-                        ":ve": solutionObject.verify,
-                        ":dd": solutionObject.dateDeleted
-                    },
-                })
-                .promise();
+            const params = {
+                TableName: process.env.BOB_TABLE,
+                Key: { issueId },
+                UpdateExpression:
+                    'SET #ve = :ve, #dd = :dd REMOVE solutionId, solutionUser, solutionTitle, solutionDetail, solutionAttachment, dateUpdated',
+                ExpressionAttributeNames: {
+                    "#ve": "verify",
+                    "#dd": "dateDeleted"
+                },
+                ExpressionAttributeValues: {
+                    ":ve": solutionObject.verify,
+                    ":dd": solutionObject.dateDeleted
+                },
+            };
+            await this.dbService.documentClient.update(params).promise();
             return {
                 statusCode: 201,
                 messageType: `OK Request`,
@@ -150,19 +141,17 @@ export class SolutionService {
 
     async detailIssue(solutionId: string) {
         try {
+            const params = {
+                TableName: process.env.BOB_TABLE,
+                IndexName: "solutionId-index",
+                KeyConditionExpression: "solutionId = :v_solutionId",
+                ExpressionAttributeValues: {
+                    ":v_solutionId": solutionId
+                },
+            };
             return {
                 message: 'Retrieved successfully',
-                data: await this.dbService
-                    .connect()
-                    .query({
-                        TableName: this.TABLE_NAME,
-                        IndexName: "solutionId-index",
-                        KeyConditionExpression: "solutionId = :v_solutionId",
-                        ExpressionAttributeValues: {
-                            ":v_solutionId": solutionId
-                        },
-                    })
-                    .promise(),
+                data: await this.dbService.documentClient.query(params).promise(),
             };
         } catch (err) {
             throw new InternalServerErrorException(err);

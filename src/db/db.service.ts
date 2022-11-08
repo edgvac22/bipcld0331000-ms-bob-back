@@ -3,12 +3,5 @@ import * as AWS from 'aws-sdk';
 
 @Injectable()
 export class DatabaseService {
-  connect(): AWS.DynamoDB.DocumentClient {
-    return process.env.IS_OFFLINE
-      ? new AWS.DynamoDB.DocumentClient({
-          region: process.env.REGION,
-          endpoint: process.env.DYNAMODB_ENDPOINT,
-        })
-      : new AWS.DynamoDB.DocumentClient();
-  }
+  documentClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10', region: 'us-east-1' });
 }

@@ -7,7 +7,7 @@ import { UpdateSolutionDto } from './dto/update-solution.dto';
 export class SolutionController {
   constructor(private readonly solutionService: SolutionService) { }
 
-  @Post(':issueId/new')
+  @Post('/new/:issueId')
   addSolution(@Param('issueId') issueId: string, @Body() addSolutionDto: AddSolutionDto) {
     return this.solutionService.addSolution(issueId, addSolutionDto);
   }
@@ -17,12 +17,12 @@ export class SolutionController {
     return this.solutionService.listSolution();
   }
 
-  @Put(':issueId/update')
+  @Put('/update/:issueId')
   updateSolution(@Param('issueId') issueId: string, @Body() updateSolutionDto: UpdateSolutionDto) {
     return this.solutionService.updateSolution(issueId, updateSolutionDto);
   }
 
-  @Put(':issueId/remove')
+  @Put('/remove/:issueId')
   removeSolution(@Param('issueId') issueId: string) {
     return this.solutionService.removeSolution(issueId);
   }

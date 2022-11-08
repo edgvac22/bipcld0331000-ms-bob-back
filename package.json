@@ -13,7 +13,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "local": "serverless offline start"
+    "deploy": "sls deploy --region us-east-1 --stage dev",
+    "remove": "sls remove --region us-east-1 --stage dev",
+    "local": "serverless offline start",
+    "variables": "cross-env region=us-east-1 stage=dev acct=cpi geoloc=useast1"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
@@ -39,6 +42,7 @@
     "@vendia/serverless-express": "^4.10.1",
     "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1233.0",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
@@ -47,6 +51,7 @@
     "prettier": "^2.3.2",
     "serverless-iam-roles-per-function": "^3.2.0",
     "serverless-offline": "^11.1.2",
+    "serverless-prune-plugin": "^2.0.1",
     "source-map-support": "^0.5.20",
     "supertest": "^6.1.3",
     "ts-jest": "28.0.8",

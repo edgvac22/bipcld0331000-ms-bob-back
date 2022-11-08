@@ -5,30 +5,27 @@ import { DatabaseService } from '../db/db.service';
 import { SearchIssueDto } from './dto/search-issue.dto';
 
 @Injectable()
- export class IssueService {
-  TABLE_NAME = 'bob';
-  constructor(private dbService: DatabaseService) { }
+export class IssueService {
+  constructor(private dbService: DatabaseService) {}
 
   async createIssue(createIssueDto: CreateIssueDto) {
-    const issueObject = {
-      issueId: uuid(),
-      dateCreate: Date(),
-      verify: "no",
-      ...createIssueDto,
-    };
     try {
-       await this.dbService
-        .connect()
-        .put({
-          TableName: this.TABLE_NAME,
-          Item: issueObject,
-        })
-        .promise();
+      const params = {
+        TableName: process.env.BOB_TABLE,
+        Item: {
+          issueId: uuid(),
+          dateCreate: Date(),
+          verify: "no",
+          ...createIssueDto,
+        }
+      };
+
+      await this.dbService.documentClient.put(params).promise();
       return {
         statusCode: 201,
         messageType: `OK Request`,
         message: `Issue created successfully.`,
-        detail: issueObject,
+        detail: params,
       };
     } catch (err) {
       throw new InternalServerErrorException(err);
@@ -37,19 +34,17 @@ import { SearchIssueDto } from './dto/search-issue.dto';
 
   async listIssue() {
     try {
+      const params = {
+        TableName: process.env.BOB_TABLE,
+        IndexName: "verify-index",
+        KeyConditionExpression: "verify = :v_solution",
+        ExpressionAttributeValues: {
+          ":v_solution": "no"
+        },
+      };
       return {
         message: 'Retrieved successfully',
-        data: await this.dbService
-          .connect()
-          .query({
-            TableName: this.TABLE_NAME,
-            IndexName: "verify-index",
-            KeyConditionExpression: "verify = :v_solution",
-            ExpressionAttributeValues: {
-              ":v_solution": "no"
-            },
-          })
-          .promise(),
+        data: await this.dbService.documentClient.query(params).promise(),
       };
     } catch (err) {
       throw new InternalServerErrorException(err);
@@ -58,24 +53,22 @@ import { SearchIssueDto } from './dto/search-issue.dto';
 
   async searchIssue(searchIssueDto: SearchIssueDto) {
     try {
+      const params = {
+        TableName: process.env.BOB_TABLE,
+        IndexName: "verify-index",
+        KeyConditionExpression: "verify = :v_solution",
+        FilterExpression: "contains(#solutionDetail, :solutionDetail)",
+        ExpressionAttributeNames: {
+          "#solutionDetail": "solutionDetail",
+        },
+        ExpressionAttributeValues: {
+          ":solutionDetail": searchIssueDto.detailIssue,
+          ":v_solution": "yes"
+        },
+      };
       return {
         message: 'Retrieved successfully',
-        data: await this.dbService
-          .connect()
-          .query({
-            TableName: this.TABLE_NAME,
-            IndexName: "verify-index",
-            KeyConditionExpression: "verify = :v_solution",
-            FilterExpression: "contains(#solutionDetail, :solutionDetail)",
-            ExpressionAttributeNames:  {
-              "#solutionDetail": "solutionDetail",
-            },
-            ExpressionAttributeValues: {
-              ":solutionDetail": searchIssueDto.detailIssue,
-              ":v_solution": "yes"
-            },
-          })
-          .promise(),
+        data: await this.dbService.documentClient.query(params).promise(),
       };
     } catch (err) {
       throw new InternalServerErrorException(err);
