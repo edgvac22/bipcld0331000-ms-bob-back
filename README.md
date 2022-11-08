@@ -1,81 +1,46 @@
-# Demo NestJS - Serverless - DynamoDB (local) 
+# Base de Conocimiento Banistmo (B.O.B)
 
 ## Descripción
 
-En este repositorio se estará trabajando el backend de B.O.B. de manera local, mientras no se tenga el código de aplicación. Una vez se tenga, se eliminará este repositorio, y se creará uno que haga referencia al código de la aplicación.
+En este repositorio se estará trabajando el backend de B.O.B, mientras no se tenga el código de aplicación. Una vez se tenga, se eliminará este repositorio, y se creará uno que haga referencia al código de la aplicación.
 
 ## Prerrequisitos
 
-- [DynamoDB local (Docker)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html): crea un archivo docker-compose.yml, usa el primer script y haz el punto 3.
 - NodeJS v.16.
-- AWS CLI
+- Cuenta AWS
 
 ## Crear tabla de Base de datos
 
-Copiar el siguiente código en algún CLI.
-
-```bash
-aws dynamodb create-table `
-      --table-name bob `
-      --attribute-definitions `
-          AttributeName=issueId,AttributeType=S `
-          AttributeName=verify,AttributeType=S `
-          AttributeName=solutionId,AttributeType=S `
-      --key-schema AttributeName=issueId,KeyType=HASH `
-      --provisioned-throughput ReadCapacityUnits=100,WriteCapacityUnits=100 `
-      --global-secondary-indexes `
-          '[
-              {
-                 \"IndexName\": \"verify-index\",
-                 \"KeySchema\": [
-                     {\"AttributeName\":\"verify\",\"KeyType\":\"HASH\"}
-                 ],
-             \"Projection\": {
-                 \"ProjectionType\":\"ALL\"
-             },
-             \"ProvisionedThroughput\": {
-                  \"ReadCapacityUnits\": 100,
-                  \"WriteCapacityUnits\": 100
-                  }
-              },
-              {
-                 \"IndexName\": \"solutionId-index\",
-                 \"KeySchema\": [
-                     {\"AttributeName\":\"solutionId\",\"KeyType\":\"HASH\"}
-                 ],
-             \"Projection\": {
-                 \"ProjectionType\":\"INCLUDE\",
-                 \"NonKeyAttributes\":[\"area\", \"environment\", \"solutionUser\", \"solutionTitle\", \"solutionDetail\", \"solutionAttachment\", \"dateUpdated\"]
-             }, 
-             \"ProvisionedThroughput\": {
-                  \"ReadCapacityUnits\": 100,
-                  \"WriteCapacityUnits\": 100
-                  }
-              }]' `
-      --endpoint-url http://localhost:8000
-```
+Se debe agregar la plantilla `bob-dev.yml` en el CloudFormation
 
 ## Crear archivo .env
 
 Se debe crear el archivo con los siguientes valores dentro de la carpeta src/
 ```
-DYNAMODB_ENDPOINT = 'http://localhost:8000'
-IS_OFFLINE = 'true'
-REGION = 'localhost'
+BOB_TABLE = 'nombreDeTuTabla'
 ```
 
 ## Instalación 
 
-```bash
-$ npm install
-```
+Instalar dependencias
+`npm install`
 
-```bash
-$ npm run build
-```
+Compilar la aplicación
+`npm run build`
 
 ## Correr la aplicación
 
-```bash
-$ npm run local
-```
+Despliegue offline
+`npm run local`
+
+Despliegue de la aplicación en sandbox
+`npm run deploy`
+
+Remover de la aplicación en sandbox
+`npm run remove`
+
+## Contribute
+Desarrollado por ingenieria de Software Banistmo
+
+Para conocer mas de Ingeniería de Software puedes ingresar a nuestra wiki:
+- [Ingeniería de Software](https://dev.azure.com/banistmo/VP%20Servicios%20Corporativos/_wiki/wikis/VP-Servicios-Corporativos.wiki/2806/6.-Ingenier%C3%ADa-de-Software)
