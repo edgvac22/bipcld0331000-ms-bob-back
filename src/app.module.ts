@@ -10,4 +10,4 @@ import { SolutionModule } from './solution/solution.module';
     DbModule
   ],
 })
-export class AppModule {}
+export class AppModule { }

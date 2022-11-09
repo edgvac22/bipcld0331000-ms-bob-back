@@ -6,7 +6,7 @@ import { SearchIssueDto } from './dto/search-issue.dto';
 
 @Injectable()
 export class IssueService {
-  constructor(private dbService: DatabaseService) {}
+  constructor(private dbService: DatabaseService) { }
 
   async createIssue(createIssueDto: CreateIssueDto) {
     try {

@@ -1,4 +1,3 @@
-import { IssueController } from './issue.controller';
 import { IssueService } from './issue.service';
 import { DatabaseService } from '../db/db.service'
 import * as AWS from 'aws-sdk-mock';
@@ -53,7 +52,7 @@ describe('SolutionService', () => {
     });
 
     describe('searchIssue', () => {
-        
+
         it('should return a response depends of detailIssue', async () => {
             AWS.mock('DynamoDB.DocumentClient', 'query', function (params, callback: any) {
                 return callback(null, {
