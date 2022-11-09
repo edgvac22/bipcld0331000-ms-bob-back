@@ -6,7 +6,7 @@ import { UpdateSolutionDto } from './dto/update-solution.dto';
 
 @Injectable()
 export class SolutionService {
-    constructor(private dbService: DatabaseService) {}
+    constructor(private dbService: DatabaseService) { }
 
     async addSolution(issueId: string, addSolutionDto: AddSolutionDto) {
         const solutionObject = {
@@ -40,15 +40,20 @@ export class SolutionService {
                     ":du": solutionObject.dateUpdated
                 },
             };
-            await this.dbService.documentClient.update(params).promise();
             return {
                 statusCode: 201,
                 messageType: `OK Request`,
                 message: `Solution created successfully.`,
-                detail: solutionObject,
+                data: await this.dbService.documentClient.update(params).promise(),
             };
         } catch (err) {
-            throw new InternalServerErrorException(err);
+            return {
+                statusCode: 400,
+                messageType: "Bad Request",
+                errorCode: "SERVINGSW04",
+                errorMessage: "ERROR solution",
+                detail: "ERROR addSolution function"
+            }
         }
     }
 
@@ -67,7 +72,13 @@ export class SolutionService {
                 data: await this.dbService.documentClient.query(params).promise(),
             };
         } catch (err) {
-            throw new InternalServerErrorException(err);
+            return {
+                statusCode: 400,
+                messageType: "Bad Request",
+                errorCode: "SERVINGSW05",
+                errorMessage: "ERROR solution",
+                detail: "ERROR listSolution function"
+            }
         }
     }
 
@@ -95,15 +106,20 @@ export class SolutionService {
                     ":du": solutionObject.dateUpdated
                 },
             };
-            await this.dbService.documentClient.update(params).promise();
             return {
                 statusCode: 201,
                 messageType: `OK Request`,
                 message: `Solution updated successfully.`,
-                detail: solutionObject,
+                data: await this.dbService.documentClient.update(params).promise(),
             };
         } catch (err) {
-            throw new InternalServerErrorException(err);
+            return {
+                statusCode: 400,
+                messageType: "Bad Request",
+                errorCode: "SERVINGSW06",
+                errorMessage: "ERROR solution",
+                detail: "ERROR updateSolution function"
+            }
         }
     }
 
@@ -127,15 +143,20 @@ export class SolutionService {
                     ":dd": solutionObject.dateDeleted
                 },
             };
-            await this.dbService.documentClient.update(params).promise();
             return {
                 statusCode: 201,
                 messageType: `OK Request`,
                 message: `Solution deleted successfully.`,
-                detail: solutionObject,
+                data: await this.dbService.documentClient.update(params).promise(),
             };
         } catch (err) {
-            throw new InternalServerErrorException(err);
+            return {
+                statusCode: 400,
+                messageType: "Bad Request",
+                errorCode: "SERVINGSW07",
+                errorMessage: "ERROR solution",
+                detail: "ERROR removeSolution function"
+            }
         }
     }
 
@@ -154,7 +175,13 @@ export class SolutionService {
                 data: await this.dbService.documentClient.query(params).promise(),
             };
         } catch (err) {
-            throw new InternalServerErrorException(err);
+            return {
+                statusCode: 400,
+                messageType: "Bad Request",
+                errorCode: "SERVINGSW08",
+                errorMessage: "ERROR solution",
+                detail: "ERROR detailIssue function"
+            }
         }
     }
 }

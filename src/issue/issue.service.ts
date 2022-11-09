@@ -19,16 +19,20 @@ export class IssueService {
           ...createIssueDto,
         }
       };
-
-      await this.dbService.documentClient.put(params).promise();
       return {
         statusCode: 201,
         messageType: `OK Request`,
         message: `Issue created successfully.`,
-        detail: params,
+        data: await this.dbService.documentClient.put(params).promise(),
       };
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return {
+        statusCode: 400,
+        messageType: "Bad Request",
+        errorCode: "SERVINGSW01",
+        errorMessage: "ERROR issue",
+        detail: "ERROR createIssue function"
+      }
     }
   }
 
@@ -47,7 +51,13 @@ export class IssueService {
         data: await this.dbService.documentClient.query(params).promise(),
       };
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return {
+        statusCode: 400,
+        messageType: "Bad Request",
+        errorCode: "SERVINGSW02",
+        errorMessage: "ERROR issue",
+        detail: "ERROR listIssue function"
+      }
     }
   }
 
@@ -71,7 +81,13 @@ export class IssueService {
         data: await this.dbService.documentClient.query(params).promise(),
       };
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return {
+        statusCode: 400,
+        messageType: "Bad Request",
+        errorCode: "SERVINGSW03",
+        errorMessage: "ERROR issue",
+        detail: "ERROR searchIssue function"
+      }
     }
   }
 }
