@@ -20,7 +20,7 @@ Resources:
     DynamoDbTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: aws-useast1-dev-dboingsw-bob
+        TableName: awsuseast1-devcpidboingsw-bob
         AttributeDefinitions:
           - 
             AttributeName: issueId
