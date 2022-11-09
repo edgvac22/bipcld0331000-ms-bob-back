@@ -10,7 +10,6 @@ describe('SolutionService', () => {
     process.env.BOB_TABLE = 'awsuseast1-devcpidboingsw-bob';
     process.env.region = 'us-east-1';
     let databaseService: DatabaseService;
-    let solutionController: SolutionController;
     let solutionService: SolutionService;
     let addSolutionDto: AddSolutionDto;
     let updateSolutionDto: UpdateSolutionDto
@@ -19,7 +18,6 @@ describe('SolutionService', () => {
 
     beforeEach(() => {
         solutionService = new SolutionService(databaseService);
-        solutionController = new SolutionController(solutionService);
     });
 
     describe('addSolution', () => {
@@ -78,16 +76,16 @@ describe('SolutionService', () => {
         });
     });
 
-    describe('detailIssue', () => {
-        it('should get issue detail', async () => {
+    describe('detailSolution', () => {
+        it('should get solution detail', async () => {
             AWS.mock('DynamoDB.DocumentClient', 'query', function (params: any, callback: any) {
                 return callback(null, {
                     message: "Retrieved successfully",
                 });
             });
         });
-        it('detailIssue function error', async function () {
-            const result = await solutionService.detailIssue(solutionId);
+        it('detailSolution function error', async function () {
+            const result = await solutionService.detailSolution(solutionId);
             expect(result.errorCode).toContain("SERVINGSW08");
         });
     });

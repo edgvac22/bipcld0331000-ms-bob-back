@@ -160,7 +160,7 @@ export class SolutionService {
         }
     }
 
-    async detailIssue(solutionId: string) {
+    async detailSolution(solutionId: string) {
         try {
             const params = {
                 TableName: process.env.BOB_TABLE,

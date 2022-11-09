@@ -10,14 +10,12 @@ describe('SolutionService', () => {
     process.env.BOB_TABLE = 'awsuseast1-devcpidboingsw-bob';
     process.env.region = 'us-east-1';
     let databaseService: DatabaseService;
-    let issueController: IssueController;
     let issueService: IssueService;
     let createIssueDto: CreateIssueDto;
     let searchIssueDto: SearchIssueDto;
 
     beforeEach(() => {
         issueService = new IssueService(databaseService);
-        issueController = new IssueController(issueService);
     });
 
     describe('createIssue', () => {

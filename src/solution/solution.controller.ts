@@ -28,7 +28,7 @@ export class SolutionController {
   }
 
   @Get(':solutionId')
-  detailIssue(@Param('solutionId') solutionId: string) {
-    return this.solutionService.detailIssue(solutionId);
+  detailSolution(@Param('solutionId') solutionId: string) {
+    return this.solutionService.detailSolution(solutionId);
   }
 }
