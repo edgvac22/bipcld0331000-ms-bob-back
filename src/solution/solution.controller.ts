@@ -17,12 +17,12 @@ export class SolutionController {
     return this.solutionService.listSolution();
   }
 
-  @Put('/update/:issueId')
+  @Post('/update/:issueId')
   updateSolution(@Param('issueId') issueId: string, @Body() updateSolutionDto: UpdateSolutionDto) {
     return this.solutionService.updateSolution(issueId, updateSolutionDto);
   }
 
-  @Put('/remove/:issueId')
+  @Post('/remove/:issueId')
   removeSolution(@Param('issueId') issueId: string) {
     return this.solutionService.removeSolution(issueId);
   }

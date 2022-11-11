@@ -47,18 +47,15 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
-      - http:
-          method: post
-          path: /issue
-          cors:
-            methods: 
-              - POST
-              - OPTIONS
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amzn-Trace-Id
-          integration: lambda-proxy
+
+  updateItem:
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}'
+    events:
       - http:
           method: post
           path: /solution/new/{issueId}
@@ -72,11 +69,11 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
       - http:
-          method: put
+          method: post
           path: /solution/update/{issueId}
           cors:
             methods: 
-              - PUT
+              - POST
               - OPTIONS
             headers:
               - Content-Type
@@ -84,11 +81,11 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
       - http:
-          method: put
+          method: post
           path: /solution/remove/{issueId}
           cors:
             methods: 
-              - PUT
+              - POST
               - OPTIONS
             headers:
               - Content-Type
@@ -96,12 +93,12 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  getItem: 
+  queryItem: 
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - dynamodb:GetItem
+          - dynamodb:Query
         Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}'
     events:
       - http:
@@ -134,6 +131,18 @@ functions:
           cors:
             methods: 
               - GET
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
+      - http:
+          method: post
+          path: /issue
+          cors:
+            methods: 
+              - POST
               - OPTIONS
             headers:
               - Content-Type

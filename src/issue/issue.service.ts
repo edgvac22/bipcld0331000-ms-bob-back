@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateIssueDto } from './dto/create-issue.dto';
 import { v4 as uuid } from "uuid";
 import { DatabaseService } from '../db/db.service';
@@ -51,13 +51,7 @@ export class IssueService {
         data: await this.dbService.documentClient.query(params).promise(),
       };
     } catch (err) {
-      return {
-        statusCode: 400,
-        messageType: "Bad Request",
-        errorCode: "SERVINGSW02",
-        errorMessage: "ERROR issue",
-        detail: "ERROR listIssue function"
-      }
+        throw new InternalServerErrorException(err);
     }
   }
 

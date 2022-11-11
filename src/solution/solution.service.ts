@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { AddSolutionDto } from './dto/add-solution.dto';
 import { v4 as uuid } from "uuid";
 import { DatabaseService } from '../db/db.service';
@@ -47,13 +47,7 @@ export class SolutionService {
                 data: await this.dbService.documentClient.update(params).promise(),
             };
         } catch (err) {
-            return {
-                statusCode: 400,
-                messageType: "Bad Request",
-                errorCode: "SERVINGSW04",
-                errorMessage: "ERROR solution",
-                detail: "ERROR addSolution function"
-            }
+            throw new InternalServerErrorException(err);
         }
     }
 
