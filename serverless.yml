@@ -24,7 +24,7 @@ provider:
     BOB_TABLE: aws${opt:geoloc,'useast1'}-${opt:stage}${opt:acct,'cpi'}dbo${opt:proyecto,'ingsw'}-bob
   apiGateway:
     apiKeys:
-      - ${opt:proyecto,'ingsw'}-${opt:stage}-api-key  
+      - ${opt:proyecto,'ingsw'}-${opt:stage}-api-key
 
 functions:
   putItem: 
@@ -38,18 +38,63 @@ functions:
       - http:
           method: post
           path: /issue/new
+          cors:
+            methods: 
+              - POST
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
       - http:
           method: post
           path: /issue
+          cors:
+            methods: 
+              - POST
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
       - http:
           method: post
           path: /solution/new/{issueId}
+          cors:
+            methods: 
+              - POST
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
       - http:
           method: put
           path: /solution/update/{issueId}
+          cors:
+            methods: 
+              - PUT
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
       - http:
           method: put
           path: /solution/remove/{issueId}
+          cors:
+            methods: 
+              - PUT
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
 
   getItem: 
     handler: dist/serverless.handler
@@ -62,9 +107,36 @@ functions:
       - http:
           method: get
           path: /issue/list
+          cors:
+            methods: 
+              - GET
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
       - http:
           method: get
           path: /solution/list
+          cors:
+            methods: 
+              - GET
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
       - http:
           method: get
           path: /solution/{solutionId}
+          cors:
+            methods: 
+              - GET
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy

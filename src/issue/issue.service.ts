@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateIssueDto } from './dto/create-issue.dto';
 import { v4 as uuid } from "uuid";
 import { DatabaseService } from '../db/db.service';
