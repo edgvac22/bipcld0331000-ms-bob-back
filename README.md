@@ -39,7 +39,7 @@ Despliegue de la aplicación en sandbox
 Remover de la aplicación en sandbox
 `npm run remove`
 
-## Contribute
+## Contribución
 Desarrollado por Ingenieria de Software Banistmo
 
 Para conocer mas de Ingeniería de Software puedes ingresar a nuestra wiki:
