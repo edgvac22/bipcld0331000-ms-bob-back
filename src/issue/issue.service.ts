@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateIssueDto } from './dto/create-issue.dto';
 import { v4 as uuid } from "uuid";
 import { DatabaseService } from '../db/db.service';
@@ -40,18 +40,25 @@ export class IssueService {
     try {
       const params = {
         TableName: process.env.BOB_TABLE,
-        IndexName: "verify-index",
-        KeyConditionExpression: "verify = :v_solution",
+        IndexName: 'verify-index',
+        KeyConditionExpression: 'verify = :v_solution',
         ExpressionAttributeValues: {
-          ":v_solution": "no"
+          ':v_solution': 'no'
         },
       };
       return {
         message: 'Retrieved successfully',
         data: await this.dbService.documentClient.query(params).promise(),
       };
+
     } catch (err) {
-        throw new InternalServerErrorException(err);
+      return {
+        statusCode: 400,
+        messageType: "Bad Request",
+        errorCode: "SERVINGSW02",
+        errorMessage: "ERROR issue",
+        detail: "ERROR listIssue function"
+      }
     }
   }
 
@@ -59,15 +66,15 @@ export class IssueService {
     try {
       const params = {
         TableName: process.env.BOB_TABLE,
-        IndexName: "verify-index",
-        KeyConditionExpression: "verify = :v_solution",
-        FilterExpression: "contains(#solutionDetail, :solutionDetail)",
+        IndexName: 'verify-index',
+        KeyConditionExpression: 'verify = :v_solution',
+        FilterExpression: 'contains(#solutionDetail, :solutionDetail)',
         ExpressionAttributeNames: {
-          "#solutionDetail": "solutionDetail",
+          '#solutionDetail': 'solutionDetail',
         },
         ExpressionAttributeValues: {
-          ":solutionDetail": searchIssueDto.detailIssue,
-          ":v_solution": "yes"
+          ':solutionDetail': searchIssueDto.detailIssue,
+          ':v_solution': 'yes'
         },
       };
       return {

@@ -53,10 +53,10 @@ describe('SolutionService', () => {
 
     describe('searchIssue', () => {
 
-        it('should return a response depends of detailIssue', async () => {
-            AWS.mock('DynamoDB.DocumentClient', 'query', function (params, callback: any) {
+        it('should return searchIssue', async () => {
+            AWS.mock('DynamoDB.DocumentClient', 'query', function (params: any, callback: any) {
                 return callback(null, {
-                    message: "Retrieved successfully"
+                    message: "Retrieved successfully",
                 });
             });
         });

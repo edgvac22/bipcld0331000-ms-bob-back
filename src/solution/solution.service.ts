@@ -47,7 +47,13 @@ export class SolutionService {
                 data: await this.dbService.documentClient.update(params).promise(),
             };
         } catch (err) {
-            throw new InternalServerErrorException(err);
+            return {
+                statusCode: 400,
+                messageType: "Bad Request",
+                errorCode: "SERVINGSW04",
+                errorMessage: "ERROR solution",
+                detail: "ERROR addSolution function"
+            }
         }
     }
 
@@ -158,10 +164,10 @@ export class SolutionService {
         try {
             const params = {
                 TableName: process.env.BOB_TABLE,
-                IndexName: "solutionId-index",
-                KeyConditionExpression: "solutionId = :v_solutionId",
+                IndexName: 'solutionId-index',
+                KeyConditionExpression: 'solutionId = :v_solutionId',
                 ExpressionAttributeValues: {
-                    ":v_solutionId": solutionId
+                    ':v_solutionId': solutionId
                 },
             };
             return {
@@ -174,7 +180,7 @@ export class SolutionService {
                 messageType: "Bad Request",
                 errorCode: "SERVINGSW08",
                 errorMessage: "ERROR solution",
-                detail: "ERROR detailIssue function"
+                detail: "ERROR detailSolution function"
             }
         }
     }
