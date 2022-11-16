@@ -93,13 +93,13 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  queryItem: 
+  verifyIndex: 
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}'
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}/index/verify-index'
     events:
       - http:
           method: get
@@ -107,6 +107,18 @@ functions:
           cors:
             methods: 
               - GET
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
+      - http:
+          method: post
+          path: /issue
+          cors:
+            methods: 
+              - POST
               - OPTIONS
             headers:
               - Content-Type
@@ -125,24 +137,21 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  solutionIdIndex: 
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}/index/solutionId-index'
+    events:
       - http:
           method: get
           path: /solution/{solutionId}
           cors:
             methods: 
               - GET
-              - OPTIONS
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amzn-Trace-Id
-          integration: lambda-proxy
-      - http:
-          method: post
-          path: /issue
-          cors:
-            methods: 
-              - POST
               - OPTIONS
             headers:
               - Content-Type

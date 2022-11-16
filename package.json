@@ -15,7 +15,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "deploy": "sls deploy --region us-east-1 --stage dev",
     "remove": "sls remove --region us-east-1 --stage dev",
-    "local": "serverless offline start",
+    "local": "sls offline --region us-east-1 --stage dev",
     "variables": "cross-env region=us-east-1 stage=dev acct=cpi geoloc=useast1"
   },
   "dependencies": {
