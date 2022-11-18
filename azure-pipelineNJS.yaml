@@ -1,0 +1,137 @@
+variables:
+# variable de grupo de artifactory
+- group: Artifactory  
+# Propiedad del sonarQube para indicar el directorio a analizar
+- name: sonarSources
+  value: 'src' 
+# propiedad de sonarQube para indicar los directorios a excluir en el análisis
+- name: sonarExclusions
+  value: 'node_modules/**,/src/environments/*,/src/assets/*,**/*.spec.ts,/,/src/assets/*,**/*.config.ts'
+# propiedad de sonarQube para indicar el directorio donde se encontrara el reporte de cobertura
+- name: sonarCoveragePaths 
+  value: 'coverage/lcov.info' 
+# 1=proyecto nuevo en sonarQube y 0=para actualizar una rama nueva del proyecto existente en sonarQube
+- name: sonarCreateMaster
+  value: '0'  
+# Nombre del service connection para tarea de sonarQube
+- name: sonarQubeServiceEndpoint 
+  value: 'SonarLts' 
+# Nombre del service connection de sonarQube para tarea de gradle o maven
+- name: sonarQubeServiceEndpointGeneric
+  value: 'Sonar-Generic-Lts' 
+# nombre del script de compilación
+- name: commandBuild
+  value: 'build'  
+# nombre del script de pruebas unitarias
+- name: unitTestCommand
+  value: 'test:cov' 
+# js= javascript y tsc= typescript
+- name: appType
+  value: 'tsc' 
+# versión que se descargará en el agente temporalmente, si no se agrega valor utiliza la versión por defecto del agente
+- name: versionNode
+  value: '16.17.1' 
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: DevOps/_git/templates-yaml
+      ref: 'refs/heads/master'
+trigger:
+  - master
+  - develop
+  - release
+  - feature/*
+
+name: $(date:yyyyMMdd)$(rev:.r)
+stages:
+- stage: develop
+  variables:
+  - group: Artifactory
+  condition: |
+      or(
+            startsWith(variables['build.sourceBranch'], 'refs/heads/feature'),
+            startsWith(variables['build.sourceBranch'], 'refs/heads/develop'),
+            in(variables['System.PullRequest.TargetBranch'], 'refs/heads/develop')
+          )
+  jobs:
+  - job: CI
+    condition: succeeded()
+    pool: 
+      name: Docker-Agents
+    workspace:
+      clean: all
+    steps:
+    - template: build_NJS_NOFLUID_LTS.yml@template #ref de template en otro repository
+      parameters:
+        sonarCoveragePaths: ${{variables.sonarCoveragePaths}}
+        sonarExclusions: ${{variables.sonarExclusions}}
+        sonarSources: ${{variables.sonarSources}}
+        sonarCreateMaster: ${{variables.sonarCreateMaster}}
+        sonarQubeServiceEndpoint: ${{variables.sonarQubeServiceEndpoint}}
+        sonarQubeServiceEndpointGeneric: ${{variables.sonarQubeServiceEndpointGeneric}}        
+        commandBuild: ${{variables.commandBuild}}
+        unitTestCommand: ${{variables.unitTestCommand}}
+        appType: ${{variables.appType}}
+        versionNode: ${{variables.versionNode}}
+
+- stage: release
+  variables:
+  - group: Artifactory  
+  condition: |
+    or(
+          startsWith(variables['build.sourceBranch'], 'refs/heads/bugfix'),
+          startsWith(variables['build.sourceBranch'], 'refs/heads/release'),
+          in(variables['System.PullRequest.TargetBranch'], 'refs/heads/release')
+        )
+  jobs:
+  - job: CI
+    condition: succeeded()
+    pool: 
+      name: Docker-Agents
+    workspace:
+      clean: all
+    steps:
+    - template: build_NJS_NOFLUID_LTS.yml@template #ref de template en otro repository
+      parameters:
+        sonarCoveragePaths: ${{variables.sonarCoveragePaths}}
+        sonarExclusions: ${{variables.sonarExclusions}}
+        sonarSources: ${{variables.sonarSources}}
+        sonarCreateMaster: ${{variables.sonarCreateMaster}}
+        sonarQubeServiceEndpoint: ${{variables.sonarQubeServiceEndpoint}}
+        sonarQubeServiceEndpointGeneric: ${{variables.sonarQubeServiceEndpointGeneric}}        
+        commandBuild: ${{variables.commandBuild}}
+        unitTestCommand: ${{variables.unitTestCommand}}
+        appType: ${{variables.appType}}
+        versionNode: ${{variables.versionNode}}
+  
+- stage: master
+  variables:
+  - group: Artifactory-produccion  
+  condition: |
+    or(
+          startsWith(variables['build.sourceBranch'], 'refs/heads/hotfix'),
+          eq(variables['build.sourceBranch'], 'refs/heads/master'),
+          in(variables['System.PullRequest.TargetBranch'], 'refs/heads/master')
+        )
+  jobs:
+  - job: CI
+    condition: succeeded()
+    pool: 
+      name: Docker-Agents
+    workspace:
+      clean: all
+    steps:
+    - template: build_NJS_NOFLUID_LTS.yml@template #ref de template en otro repository
+      parameters:
+        sonarCoveragePaths: ${{variables.sonarCoveragePaths}}
+        sonarExclusions: ${{variables.sonarExclusions}}
+        sonarSources: ${{variables.sonarSources}}
+        sonarCreateMaster: ${{variables.sonarCreateMaster}}
+        sonarQubeServiceEndpoint: ${{variables.sonarQubeServiceEndpoint}}
+        sonarQubeServiceEndpointGeneric: ${{variables.sonarQubeServiceEndpointGeneric}}        
+        commandBuild: ${{variables.commandBuild}}
+        unitTestCommand: ${{variables.unitTestCommand}}
+        appType: ${{variables.appType}}
+        versionNode: ${{variables.versionNode}}
