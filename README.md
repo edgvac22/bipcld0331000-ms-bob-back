@@ -28,6 +28,14 @@ Instalar dependencias
 Compilar la aplicación
 `npm run build`
 
+## Pruebas unitarias
+
+Test
+`npm run test`
+
+Cobertura
+`npm run test:cov`
+
 ## Correr la aplicación
 
 Despliegue offline
