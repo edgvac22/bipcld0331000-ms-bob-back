@@ -1,8 +1,8 @@
 {
   "name": "bob",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Base de Conocimiento Banistmo (B.O.B).",
+  "author": "Edgardo Vaca",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

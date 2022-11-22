@@ -27,7 +27,7 @@ provider:
       - ${opt:proyecto,'ingsw'}-${opt:stage}-api-key
 
 functions:
-  putItem: 
+  createIssue: 
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -48,7 +48,7 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  updateItem:
+  addSolution:
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -68,6 +68,15 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  updateSolution:
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}'
+    events:
       - http:
           method: post
           path: /solution/update/{issueId}
@@ -80,6 +89,15 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  removeSolution:
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}'
+    events:
       - http:
           method: post
           path: /solution/remove/{issueId}
@@ -93,7 +111,7 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  verifyIndex: 
+  listIssue: 
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -113,6 +131,15 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  searchIssue: 
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}/index/verify-index'
+    events:
       - http:
           method: post
           path: /issue
@@ -125,6 +152,15 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  listSolution: 
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}/index/verify-index'
+    events:
       - http:
           method: get
           path: /solution/list
@@ -138,7 +174,7 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  solutionIdIndex: 
+  detailSolution: 
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow

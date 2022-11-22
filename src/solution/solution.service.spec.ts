@@ -1,4 +1,3 @@
-import { SolutionController } from './solution.controller';
 import { SolutionService } from './solution.service';
 import { DatabaseService } from '../db/db.service'
 import * as AWS from 'aws-sdk-mock';
