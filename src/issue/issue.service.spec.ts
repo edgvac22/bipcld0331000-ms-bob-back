@@ -6,12 +6,11 @@ import { SearchIssueDto } from './dto/search-issue.dto';
 
 describe('SolutionService', () => {
 
-    process.env.BOB_TABLE = 'awsuseast1-devcpidboingsw-bob';
-    process.env.region = 'us-east-1';
     let databaseService: DatabaseService;
     let issueService: IssueService;
     let createIssueDto: CreateIssueDto;
     let searchIssueDto: SearchIssueDto;
+    let issueId: "aksjdfk-12313-askdfj";
 
     beforeEach(() => {
         issueService = new IssueService(databaseService);
@@ -48,6 +47,22 @@ describe('SolutionService', () => {
         it('listIssue function error', async function () {
             const result = await issueService.listIssue();
             expect(result.errorCode).toContain("SERVINGSW02");
+        });
+    });
+
+    describe('getIssue', () => {
+
+        it('should return info of an specific issue', async () => {
+            AWS.mock('DynamoDB.DocumentClient', 'get', function (params: any, callback: any) {
+                return callback(null, {
+                    message: 'Retrieved successfully',
+                });
+            });
+        });
+
+        it('getIssue function error', async function () {
+            const result = await issueService.getIssue(issueId);
+            expect(result.errorCode).toContain("SERVINGSW09");
         });
     });
 

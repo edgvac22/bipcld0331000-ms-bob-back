@@ -10,6 +10,7 @@ describe('AppController', () => {
     let issueService: IssueService;
     let createIssueDto: CreateIssueDto;
     let searchIssueDto: SearchIssueDto;
+    let issueId: 'ksjafdkj-123123-asdfkjasdk'
 
     beforeEach(async () => {
         const app: TestingModule = await Test.createTestingModule({
@@ -21,6 +22,7 @@ describe('AppController', () => {
                         createIssue: jest.fn().mockReturnValue('Issue created successfully.'),
                         listIssue: jest.fn().mockReturnValue('Retrieved successfully'),
                         searchissue: jest.fn().mockReturnValue('Retrieved successfully'),
+                        getIssue: jest.fn().mockReturnValue('Retrieved successfully'),
                     },
                 },
             ],
@@ -41,6 +43,13 @@ describe('AppController', () => {
         it('should return "Retrieved successfully"', () => {
             issueService.listIssue = jest.fn().mockReturnValueOnce('Retrieved successfully');
             expect(issueController.listIssue()).toBe('Retrieved successfully');
+        });
+    });
+
+    describe('getIssue', () => {
+        it('should return "Retrieved successfully"', () => {
+            issueService.getIssue = jest.fn().mockReturnValueOnce('Retrieved successfully');
+            expect(issueController.getIssue(issueId)).toBe('Retrieved successfully');
         });
     });
 

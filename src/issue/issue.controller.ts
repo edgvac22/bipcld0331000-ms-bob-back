@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param } from '@nestjs/common';
 import { IssueService } from './issue.service';
 import { CreateIssueDto } from './dto/create-issue.dto';
 import { SearchIssueDto } from './dto/search-issue.dto';
@@ -15,6 +15,11 @@ export class IssueController {
   @Get('/list')
   listIssue() {
     return this.issueService.listIssue();
+  }
+
+  @Get(':issueId')
+  getIssue(@Param('issueId') issueId: string) {
+    return this.issueService.getIssue(issueId);
   }
 
   @Post()

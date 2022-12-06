@@ -6,8 +6,6 @@ import { UpdateSolutionDto } from './dto/update-solution.dto';
 
 describe('SolutionService', () => {
 
-    process.env.BOB_TABLE = 'awsuseast1-devcpidboingsw-bob';
-    process.env.region = 'us-east-1';
     let databaseService: DatabaseService;
     let solutionService: SolutionService;
     let addSolutionDto: AddSolutionDto;

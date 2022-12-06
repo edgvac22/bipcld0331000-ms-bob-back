@@ -62,6 +62,27 @@ export class IssueService {
     }
   }
 
+  async getIssue(issueId: string) {
+    try {
+      const params = {
+        TableName: process.env.BOB_TABLE,
+        Key: { issueId: issueId },
+      }
+      return {
+        message: 'Retrieved successfully',
+        data: await this.dbService.documentClient.get(params).promise(),
+      };
+    } catch (err) {
+      return {
+        statusCode: 400,
+        messageType: "Bad Request",
+        errorCode: "SERVINGSW09",
+        errorMessage: "ERROR issue",
+        detail: "ERROR getIssue function"
+      }
+    }
+  }
+
   async searchIssue(searchIssueDto: SearchIssueDto) {
     try {
       const params = {

@@ -158,3 +158,24 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  getIssue: 
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}'
+    events:
+      - http:
+          method: get
+          path: /issue/{issueId}
+          cors:
+            methods: 
+              - GET
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
