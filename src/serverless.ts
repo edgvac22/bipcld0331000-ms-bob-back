@@ -12,6 +12,7 @@ async function bootstrap(): Promise<Handler> {
     whitelist: true,
     forbidNonWhitelisted: true,
   }));
+  app.enableCors();
   await app.init();
   const expressApp = app.getHttpAdapter().getInstance();
   return serverlessExpress({ app: expressApp });
