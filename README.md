@@ -39,7 +39,7 @@ Cobertura
 ## Correr la aplicación
 
 Despliegue offline
-`npm run local`
+Se debe descomentar el plugin en el serverless.yml, y correr el siguiente comando `npm run local`
 
 Despliegue de la aplicación en sandbox
 `npm run deploy`
