@@ -20,12 +20,6 @@ export class AddSolutionDto {
   })
   solutionTitle: string;
 
-  @IsArray({
-    message: 'El adjunto de la Solución debe ser un array.',
-  })
-  @IsOptional()
-  solutionAttachment: object;
-
   @IsDefined({
     message: 'El detalle de la Solución debe estar definido.'
   })

@@ -35,10 +35,4 @@ export class CreateIssueDto {
     message: 'El detalle del Hallazgo debe ser superior a 20 caracteres.',
   })
   issueDetail: string;
-
-  @IsArray({
-    message: 'El adjunto del Hallazgo debe ser un array',
-  })
-  @IsOptional()
-  issueAttachment: object;
 }

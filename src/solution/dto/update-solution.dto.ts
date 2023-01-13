@@ -9,11 +9,6 @@ export class UpdateSolutionDto {
   })
   solutionTitle: string;
 
-  @IsArray({
-    message: 'El adjunto de la Solución debe ser un array.',
-  })
-  solutionAttachment: object;
-
   @IsString({
     message: 'El detalle de la Solución debe ser cadena o string.',
   })

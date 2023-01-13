@@ -20,13 +20,12 @@ export class SolutionService {
                 TableName: process.env.BOB_TABLE,
                 Key: { issueId },
                 UpdateExpression:
-                    'SET #ve = :ve, #id = :id, #su = :su, #st = :st, #sa = :sa, #sd = :sd, #du = :du',
+                    'SET #ve = :ve, #id = :id, #su = :su, #st = :st, #sd = :sd, #du = :du',
                 ExpressionAttributeNames: {
                     "#ve": "verify",
                     "#id": "solutionId",
                     "#su": "solutionUser",
                     "#st": "solutionTitle",
-                    "#sa": "solutionAttachment",
                     "#sd": "solutionDetail",
                     "#du": "dateUpdated"
                 },
@@ -35,7 +34,6 @@ export class SolutionService {
                     ":id": solutionObject.solutionId,
                     ":su": solutionObject.solutionUser,
                     ":st": solutionObject.solutionTitle,
-                    ":sa": solutionObject.solutionAttachment,
                     ":sd": solutionObject.solutionDetail,
                     ":du": solutionObject.dateUpdated
                 },
@@ -92,16 +90,14 @@ export class SolutionService {
                 TableName: process.env.BOB_TABLE,
                 Key: { issueId },
                 UpdateExpression:
-                    'SET #st = :st, #sa = :sa, #sd = :sd, #du = :du',
+                    'SET #st = :st, #sd = :sd, #du = :du',
                 ExpressionAttributeNames: {
                     "#st": "solutionTitle",
-                    "#sa": "solutionAttachment",
                     "#sd": "solutionDetail",
                     "#du": "dateUpdated"
                 },
                 ExpressionAttributeValues: {
                     ":st": solutionObject.solutionTitle,
-                    ":sa": solutionObject.solutionAttachment,
                     ":sd": solutionObject.solutionDetail,
                     ":du": solutionObject.dateUpdated
                 },
@@ -133,7 +129,7 @@ export class SolutionService {
                 TableName: process.env.BOB_TABLE,
                 Key: { issueId },
                 UpdateExpression:
-                    'SET #ve = :ve, #dd = :dd REMOVE solutionId, solutionUser, solutionTitle, solutionDetail, solutionAttachment, dateUpdated',
+                    'SET #ve = :ve, #dd = :dd REMOVE solutionId, solutionUser, solutionTitle, solutionDetail, dateUpdated',
                 ExpressionAttributeNames: {
                     "#ve": "verify",
                     "#dd": "dateDeleted"
