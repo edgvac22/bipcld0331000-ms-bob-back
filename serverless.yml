@@ -22,12 +22,13 @@ provider:
     name: aws${opt:geoloc,'useast1'}-${opt:stage}${opt:proyecto,'ingsw'}serverless
   environment:
     BOB_TABLE: aws${opt:geoloc,'useast1'}-${opt:stage}${opt:acct,'cpi'}dbo${opt:proyecto,'ingsw'}-bob
+    ENVIRONMENT_AREA_TABLE: aws${opt:geoloc,'useast1'}-${opt:stage}${opt:acct,'cpi'}dbo${opt:proyecto,'ingsw'}-environment-area
   apiGateway:
     apiKeys:
       - ${opt:proyecto,'ingsw'}-${opt:stage}-api-key
 
 functions:
-  putItem: 
+  putItemBob: 
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -47,6 +48,40 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  putItemEnvironmentOrArea: 
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.ENVIRONMENT_AREA_TABLE}'
+    events:
+      - http:
+          method: post
+          path: /area/new
+          cors:
+            methods: 
+              - POST
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
+      - http:
+          method: post
+          path: /environment/new
+          cors:
+            methods: 
+              - POST
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
+
 
   updateItem:
     handler: dist/serverless.handler
@@ -149,6 +184,39 @@ functions:
       - http:
           method: get
           path: /solution/{solutionId}
+          cors:
+            methods: 
+              - GET
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
+
+  listAreaAndEnvironment: 
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.ENVIRONMENT_AREA_TABLE}/index/type-index'
+    events:
+      - http:
+          method: get
+          path: /area/list
+          cors:
+            methods: 
+              - GET
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
+      - http:
+          method: get
+          path: /environment/list
           cors:
             methods: 
               - GET

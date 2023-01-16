@@ -1,0 +1,53 @@
+Description: Diseno de Esquema de Base de Datos, Base de Conocimiento Banistmo (B.O.B) para el Ambiente y Area de TI
+
+Parameters:
+
+    Stage:
+      Description: desarrollo
+      Type: String
+
+    AccountIndicator:
+      Description: dev
+      Type: String
+
+Conditions:
+  AmbientePR: !Equals [ !Ref Stage, "pr" ]
+  AmbienteQA: !Equals [ !Ref Stage, "qa" ]
+  AmbienteQAE: !Equals [ !Ref Stage, "qae" ]
+  AmbienteINT: !Equals [ !Ref Stage, "dev" ]
+
+Resources:
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: awsuseast1-devcpidboingsw-environment-area
+        AttributeDefinitions:
+          - 
+            AttributeName: id
+            AttributeType: S
+          - 
+            AttributeName: type
+            AttributeType: S
+        KeySchema:
+          - 
+            AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        PointInTimeRecoverySpecification:
+          PointInTimeRecoveryEnabled: !If [AmbientePR, True, !If [AmbienteQAE, false, !If [AmbienteQA, false, false]]]
+        SSESpecification:
+          SSEEnabled: true
+        GlobalSecondaryIndexes : [
+          {
+          IndexName : "type-index",
+          KeySchema : [
+            {
+              AttributeName : "type",
+              KeyType : "HASH"
+            },
+          ],                         
+          Projection : {
+            NonKeyAttributes : ["name"],
+            ProjectionType: "INCLUDE"
+          }
+        }]
