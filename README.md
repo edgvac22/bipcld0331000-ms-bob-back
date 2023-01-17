@@ -18,6 +18,8 @@ Se debe agregar la plantilla `bob-dev.yml` en el CloudFormation
 Se debe crear el archivo .env dentro de la carpeta src/
 ```
 BOB_TABLE = 'nombreDeTuTabla'
+ENVIRONMENT_AREA_TABLE = 'nombreDeTuTabla'
+region = 'tuRegion'
 ```
 
 ## Instalación 
