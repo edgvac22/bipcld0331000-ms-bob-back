@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateIssueDto } from './dto/create-issue.dto';
 import { v4 as uuid } from "uuid";
 import { DatabaseService } from '../db/db.service';
+import { S3 } from 'aws-sdk';
 
 @Injectable()
 export class IssueService {
+  s3 = new S3();
   constructor(private dbService: DatabaseService) { }
 
   async createIssue(createIssueDto: CreateIssueDto) {
@@ -49,7 +51,6 @@ export class IssueService {
         message: 'Retrieved successfully',
         data: await this.dbService.documentClient.query(params).promise(),
       };
-
     } catch (err) {
       return {
         statusCode: 400,
@@ -79,6 +80,40 @@ export class IssueService {
         errorMessage: "ERROR issue",
         detail: "ERROR getIssue function"
       }
+    }
+  }
+
+  async getIssueImages(fileId: string) {
+    try {
+      const params = {
+        Bucket: 'plantilla-s3-prueba-ingsw',
+        Prefix: `issue/${fileId}/`,
+      }
+      const data = await this.s3.listObjects(params).promise();
+      const files = data.Contents;
+      const fileUrls: any = [];
+      for (let element of files) {
+        const file = element;
+        const fileKey = file.Key;
+        const fileUrl = this.s3.getSignedUrl('getObject', {
+          Bucket: 'plantilla-s3-prueba-ingsw',
+          Key: fileKey
+        });
+        fileUrls.push(fileUrl);
+      }
+      return {
+        msg: 'Retrieved successfully',
+        fileUrls: fileUrls,
+      }
+    } catch (err) {
+      // return {
+      //   statusCode: 400,
+      //   messageType: "Bad Request",
+      //   errorCode: "SERVINGSW25",
+      //   errorMessage: "ERROR issue",
+      //   detail: "ERROR getIssueImages function"
+      // }
+      throw new InternalServerErrorException(err);
     }
   }
 }

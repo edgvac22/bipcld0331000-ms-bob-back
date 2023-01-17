@@ -20,4 +20,9 @@ export class IssueController {
   getIssue(@Param('issueId') issueId: string) {
     return this.issueService.getIssue(issueId);
   }
+
+  @Get('image/:fileId')
+  getIssueImages(@Param('fileId') fileId: string) {
+    return this.issueService.getIssueImages(fileId);
+  }
 }

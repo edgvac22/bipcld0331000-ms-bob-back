@@ -247,3 +247,27 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  getIssueImages: 
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "s3:ListBucket"
+          - "s3:GetObject"
+        Resource:
+          - "arn:aws:s3:::plantilla-s3-prueba-ingsw"
+          - "arn:aws:s3:::plantilla-s3-prueba-ingsw/*"
+    events:
+      - http:
+          method: get
+          path: /issue/image/{fileId}
+          cors:
+            methods: 
+              - GET
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
