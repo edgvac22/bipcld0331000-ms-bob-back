@@ -248,7 +248,7 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  getIssueImages: 
+  getImagesOrCount: 
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -271,8 +271,32 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+      - http:
+          method: get
+          path: /solution/image/{issueId}
+          cors:
+            methods: 
+              - GET
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
+      - http:
+          method: get
+          path: /solution/count/{issueId}
+          cors:
+            methods: 
+              - GET
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
 
-  uploadIssueFile: 
+  uploadFiles: 
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -286,6 +310,18 @@ functions:
       - http:
           method: post
           path: /issue/file
+          cors:
+            methods: 
+              - POST
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy
+      - http:
+          method: post
+          path: /solution/file/{issueId}
           cors:
             methods: 
               - POST

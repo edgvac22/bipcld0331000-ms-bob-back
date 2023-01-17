@@ -3,9 +3,11 @@ import { AddSolutionDto } from './dto/add-solution.dto';
 import { v4 as uuid } from "uuid";
 import { DatabaseService } from '../db/db.service';
 import { UpdateSolutionDto } from './dto/update-solution.dto';
+import { S3 } from 'aws-sdk';
 
 @Injectable()
 export class SolutionService {
+    s3 = new S3();
     constructor(private dbService: DatabaseService) { }
 
     async addSolution(issueId: string, addSolutionDto: AddSolutionDto) {
@@ -177,6 +179,80 @@ export class SolutionService {
                 errorCode: "SERVINGSW08",
                 errorMessage: "ERROR solution",
                 detail: "ERROR detailSolution function"
+            }
+        }
+    }
+
+    async uploadSolutionFile(fileName: string, dataBuffer: Buffer, issueId: string) {
+        const params = {
+            Bucket: 'plantilla-s3-prueba-ingsw',
+            Body: dataBuffer,
+            Key: `solution/${issueId}/${uuid()}-${fileName}`,
+            ACL: 'public-read'
+        }
+        try {
+            const uploadResult = await this.s3.upload(params).promise();
+            return uploadResult;
+        } catch (err) {
+            return {
+                statusCode: 400,
+                messageType: "Bad Request",
+                errorCode: "SERVINGSW27",
+                errorMessage: "ERROR solution",
+                detail: "ERROR uploadSolutionFile function"
+            }
+        }
+    }
+
+    async countSolutionBucket(issueId: string) {
+        const params = {
+            Bucket: 'plantilla-s3-prueba-ingsw',
+            Prefix: `solution/${issueId}/`,
+        }
+        try {
+            const countBucket = await this.s3.listObjects(params).promise();
+            return {
+                msg: 'Retrieved successfully.',
+                length: countBucket.Contents.length - 1,
+            }
+        } catch (err) {
+            return {
+                statusCode: 400,
+                messageType: "Bad Request",
+                errorCode: "SERVINGSW28",
+                errorMessage: "ERROR solution",
+                detail: "ERROR countSolutionBucket function"
+            }
+        }
+    }
+
+    async imageSolutionBucket(issueId: string) {
+        const params = {
+            Bucket: 'plantilla-s3-prueba-ingsw',
+            Prefix: `solution/${issueId}/`,
+        }
+        try {
+            const data = await this.s3.listObjects(params).promise();
+            const files = data.Contents;
+            const fileUrls: any = [];
+            for (const element of files) {
+                const file = element;
+                const fileKey = file.Key;
+
+                const fileUrl = this.s3.getSignedUrl('getObject', {
+                    Bucket: 'plantilla-s3-prueba-ingsw',
+                    Key: fileKey,
+                });
+                fileUrls.push(fileUrl);
+            }
+            return fileUrls;
+        } catch (err) {
+            return {
+                statusCode: 400,
+                messageType: "Bad Request",
+                errorCode: "SERVINGSW29",
+                errorMessage: "ERROR solution",
+                detail: "ERROR imageSolutionBucket function"
             }
         }
     }

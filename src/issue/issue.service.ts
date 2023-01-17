@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateIssueDto } from './dto/create-issue.dto';
 import { v4 as uuid } from "uuid";
 import { DatabaseService } from '../db/db.service';
@@ -116,7 +116,7 @@ export class IssueService {
     }
   }
 
-  async uploadFile(fileName: string, dataBuffer: Buffer, id: string) {
+  async uploadIssueFile(fileName: string, dataBuffer: Buffer, id: string) {
     try {
       const params = {
         Bucket: 'example',
@@ -124,8 +124,10 @@ export class IssueService {
         Key: `issue/${id}/${uuid()}-${fileName}`,
         ACL: 'public-read'
       }
-      const uploadResult = await this.s3.upload(params).promise();
-      return uploadResult;
+      return {
+        msg: 'Uploaded successfully',
+        data: await this.s3.upload(params).promise(),
+      }
     } catch (err) {
       return {
         statusCode: 400,
