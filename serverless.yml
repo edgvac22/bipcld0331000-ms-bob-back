@@ -271,3 +271,27 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  uploadIssueFile: 
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "s3:PutObject"
+          - "s3:PutObjectAcl"
+        Resource:
+          - "arn:aws:s3:::plantilla-s3-prueba-ingsw"
+          - "arn:aws:s3:::plantilla-s3-prueba-ingsw/*"
+    events:
+      - http:
+          method: post
+          path: /issue/file
+          cors:
+            methods: 
+              - POST
+              - OPTIONS
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amzn-Trace-Id
+          integration: lambda-proxy

@@ -106,14 +106,34 @@ export class IssueService {
         fileUrls: fileUrls,
       }
     } catch (err) {
-      // return {
-      //   statusCode: 400,
-      //   messageType: "Bad Request",
-      //   errorCode: "SERVINGSW25",
-      //   errorMessage: "ERROR issue",
-      //   detail: "ERROR getIssueImages function"
-      // }
-      throw new InternalServerErrorException(err);
+      return {
+        statusCode: 400,
+        messageType: "Bad Request",
+        errorCode: "SERVINGSW25",
+        errorMessage: "ERROR issue",
+        detail: "ERROR getIssueImages function"
+      }
+    }
+  }
+
+  async uploadFile(fileName: string, dataBuffer: Buffer, id: string) {
+    try {
+      const params = {
+        Bucket: 'example',
+        Body: dataBuffer,
+        Key: `issue/${id}/${uuid()}-${fileName}`,
+        ACL: 'public-read'
+      }
+      const uploadResult = await this.s3.upload(params).promise();
+      return uploadResult;
+    } catch (err) {
+      return {
+        statusCode: 400,
+        messageType: "Bad Request",
+        errorCode: "SERVINGSW26",
+        errorMessage: "ERROR issue",
+        detail: "ERROR uploadFile function"
+      }
     }
   }
 }
