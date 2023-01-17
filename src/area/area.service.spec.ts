@@ -1,18 +1,48 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { DatabaseService } from '../db/db.service'
+import * as AWS from 'aws-sdk-mock';
 import { AreaService } from './area.service';
+import { CreateAreaDto } from './dto/create-area.dto';
 
 describe('AreaService', () => {
-  let service: AreaService;
+  let databaseService: DatabaseService;
+  let areaService: AreaService;
+  let createAreaDto: CreateAreaDto;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [AreaService],
-    }).compile();
-
-    service = module.get<AreaService>(AreaService);
+  beforeEach(() => {
+    areaService = new AreaService(databaseService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  describe('createArea', () => {
+
+    it('should create an area', async () => {
+      AWS.mock('DynamoDB.DocumentClient', 'put', function (params: any, callback: any) {
+        return callback(null, {
+          statusCode: 201,
+          messageType: "OK Request",
+          message: "Area created successfully.",
+        });
+      });
+    });
+
+    it('createArea function error', async function () {
+      const result = await areaService.createArea(createAreaDto);
+      expect(result.errorCode).toContain("SERVINGSW21");
+    });
+  });
+
+  describe('listArea', () => {
+
+    it('should return area list', async () => {
+      AWS.mock('DynamoDB.DocumentClient', 'query', function (params: any, callback: any) {
+        return callback(null, {
+          message: 'Retrieved successfully',
+        });
+      });
+    });
+
+    it('listArea function error', async function () {
+      const result = await areaService.listArea();
+      expect(result.errorCode).toContain("SERVINGSW22");
+    });
   });
 });

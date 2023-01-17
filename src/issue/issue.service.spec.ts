@@ -2,14 +2,12 @@ import { IssueService } from './issue.service';
 import { DatabaseService } from '../db/db.service'
 import * as AWS from 'aws-sdk-mock';
 import { CreateIssueDto } from './dto/create-issue.dto';
-import { SearchIssueDto } from './dto/search-issue.dto';
 
 describe('SolutionService', () => {
 
     let databaseService: DatabaseService;
     let issueService: IssueService;
     let createIssueDto: CreateIssueDto;
-    let searchIssueDto: SearchIssueDto;
     let issueId: "aksjdfk-12313-askdfj";
 
     beforeEach(() => {
@@ -63,22 +61,6 @@ describe('SolutionService', () => {
         it('getIssue function error', async function () {
             const result = await issueService.getIssue(issueId);
             expect(result.errorCode).toContain("SERVINGSW09");
-        });
-    });
-
-    describe('searchIssue', () => {
-
-        it('should return searchIssue', async () => {
-            AWS.mock('DynamoDB.DocumentClient', 'query', function (params: any, callback: any) {
-                return callback(null, {
-                    message: "Retrieved successfully",
-                });
-            });
-        });
-
-        it('searchIssue function error', async function () {
-            const result = await issueService.searchIssue(searchIssueDto);
-            expect(result.errorCode).toContain("SERVINGSW03");
         });
     });
 });

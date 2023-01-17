@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DatabaseService } from '../db/db.service';
 import { CreateIssueDto } from './dto/create-issue.dto';
-import { SearchIssueDto } from './dto/search-issue.dto';
 import { IssueController } from './issue.controller';
 import { IssueService } from './issue.service';
 
@@ -9,7 +8,6 @@ describe('AppController', () => {
     let issueController: IssueController;
     let issueService: IssueService;
     let createIssueDto: CreateIssueDto;
-    let searchIssueDto: SearchIssueDto;
     let issueId: 'ksjafdkj-123123-asdfkjasdk'
 
     beforeEach(async () => {
@@ -50,13 +48,6 @@ describe('AppController', () => {
         it('should return "Retrieved successfully"', () => {
             issueService.getIssue = jest.fn().mockReturnValueOnce('Retrieved successfully');
             expect(issueController.getIssue(issueId)).toBe('Retrieved successfully');
-        });
-    });
-
-    describe('searchIssue', () => {
-        it('should return "Retrieved successfully"', () => {
-            issueService.searchIssue = jest.fn().mockReturnValueOnce('Retrieved successfully');
-            expect(issueController.searchIssue(searchIssueDto)).toBe('Retrieved successfully');
         });
     });
 });

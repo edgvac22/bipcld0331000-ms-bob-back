@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateIssueDto } from './dto/create-issue.dto';
 import { v4 as uuid } from "uuid";
 import { DatabaseService } from '../db/db.service';
-import { SearchIssueDto } from './dto/search-issue.dto';
 
 @Injectable()
 export class IssueService {
@@ -79,36 +78,6 @@ export class IssueService {
         errorCode: "SERVINGSW09",
         errorMessage: "ERROR issue",
         detail: "ERROR getIssue function"
-      }
-    }
-  }
-
-  async searchIssue(searchIssueDto: SearchIssueDto) {
-    try {
-      const params = {
-        TableName: process.env.BOB_TABLE,
-        IndexName: 'verify-index',
-        KeyConditionExpression: 'verify = :v_solution',
-        FilterExpression: 'contains(#solutionDetail, :solutionDetail)',
-        ExpressionAttributeNames: {
-          '#solutionDetail': 'solutionDetail',
-        },
-        ExpressionAttributeValues: {
-          ':solutionDetail': searchIssueDto.detailIssue,
-          ':v_solution': 'yes'
-        },
-      };
-      return {
-        message: 'Retrieved successfully',
-        data: await this.dbService.documentClient.query(params).promise(),
-      };
-    } catch (err) {
-      return {
-        statusCode: 400,
-        messageType: "Bad Request",
-        errorCode: "SERVINGSW03",
-        errorMessage: "ERROR issue",
-        detail: "ERROR searchIssue function"
       }
     }
   }

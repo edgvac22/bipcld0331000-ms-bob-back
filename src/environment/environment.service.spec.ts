@@ -1,18 +1,48 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { EnvironmentService } from './environment.service';
+import { DatabaseService } from '../db/db.service'
+import * as AWS from 'aws-sdk-mock';
+import { CreateEnvironmentDto } from './dto/create-environment.dto';
 
 describe('EnvironmentService', () => {
-  let service: EnvironmentService;
+  let databaseService: DatabaseService;
+  let environmentService: EnvironmentService;
+  let createEnvironmentDto: CreateEnvironmentDto;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [EnvironmentService],
-    }).compile();
-
-    service = module.get<EnvironmentService>(EnvironmentService);
+  beforeEach(() => {
+    environmentService = new EnvironmentService(databaseService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  describe('createEnvironment', () => {
+
+    it('should create an environment', async () => {
+      AWS.mock('DynamoDB.DocumentClient', 'put', function (params: any, callback: any) {
+        return callback(null, {
+          statusCode: 201,
+          messageType: "OK Request",
+          message: "Environment created successfully.",
+        });
+      });
+    });
+
+    it('createEnvironment function error', async function () {
+      const result = await environmentService.createEnvironment(createEnvironmentDto);
+      expect(result.errorCode).toContain("SERVINGSW23");
+    });
+  });
+
+  describe('listEnvironment', () => {
+
+    it('should return environment list', async () => {
+      AWS.mock('DynamoDB.DocumentClient', 'query', function (params: any, callback: any) {
+        return callback(null, {
+          message: 'Retrieved successfully',
+        });
+      });
+    });
+
+    it('listEnvironment function error', async function () {
+      const result = await environmentService.listEnvironment();
+      expect(result.errorCode).toContain("SERVINGSW24");
+    });
   });
 });
