@@ -6,7 +6,7 @@ import { AppModule } from './app.module';
 
 let server: Handler;
 
-async function bootstrap(): Promise<Handler> {
+export async function bootstrap(): Promise<Handler> {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,

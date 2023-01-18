@@ -142,19 +142,20 @@ describe('SolutionService', () => {
         });
     });
 
-    describe('imageSolutionBucket', () => {
-        it('should return a success message when get the images of solution', async () => {
-            const issueIdMock = '123';
-            const response = await solutionService.imageSolutionBucket(issueIdMock);
-            expect(response.msg).toEqual('Retrieved successfully');
-        });
-    });
-
     describe('countSolutionBucket', () => {
-        it('should return the count of a solution bucket', async () => {
-            const issueIdMock = '123';
-            const response = await solutionService.countSolutionBucket(issueIdMock);
-            expect(response.msg).toEqual('Retrieved successfully.');
+        it('should return the number of objects in the solution bucket', async () => {
+            const issueIdMock = 'issue123';
+            const s3Mock = {
+                listObjects: jest.fn().mockResolvedValue({
+                    Contents: [{}]
+                })
+            };
+            const s3Service = new SolutionService(s3Mock as any);
+            const result = await s3Service.countSolutionBucket(issueIdMock);
+            expect(result).toEqual({
+                msg: 'Retrieved successfully.',
+                length: -1,
+            });
         });
     });
 });

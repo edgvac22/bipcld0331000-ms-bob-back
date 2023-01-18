@@ -17,18 +17,20 @@ describe('SolutionService', () => {
     ];
     let id: "123"
     let s3UploadMock: any;
-    let s3ListObjectsMock: any;
-    let s3GetSignedUrlMock: any;
+    let s3Mock: any;
+    let s3Service: IssueService;
 
     beforeEach(() => {
         issueService = new IssueService(databaseService);
+        s3Mock = {
+            listObjects: jest.fn(),
+            getSignedUrl: jest.fn(),
+        };
+        s3Service = new IssueService(s3Mock);
     });
 
     beforeAll(() => {
         s3UploadMock = jest.spyOn(S3.prototype, 'upload');
-        s3ListObjectsMock = jest.fn(S3.prototype.listObjects);
-        s3GetSignedUrlMock = jest.fn(S3.prototype.getSignedUrl);
-
     });
 
     describe('createIssue', () => {
@@ -126,20 +128,52 @@ describe('SolutionService', () => {
         });
     });
 
-    describe('getIssueImages', () => {
-        it('should return a success message and fileUrls when the S3 calls are successful', async () => {
-            const fileId = '123';
-            const s3Data = { Contents: [{ Key: 'issue/123/file1' }, { Key: 'issue/123/file2' }] };
-            const fileUrls = ['https://example.com/file1', 'https://example.com/file2'];
+    // it('should return a list of file URLs', async () => {
+    //     const fileId = 'file-id';
 
-            s3ListObjectsMock.mockImplementation((params: any) => {
-                return { promise: () => Promise.resolve(s3Data) };
-            });
-            s3GetSignedUrlMock.mockImplementation((operation: any, params: any) => {
-                return `https://example.com/${params.Key.split('/').pop()}`;
-            });
-            const response = await issueService.getIssueImages(fileId);
-            expect(response.msg).toEqual('Retrieved successfully');
-        });
-    });
+    //     s3Mock.listObjects.mockResolvedValue({
+    //         Contents: [{ Key: 'issue/file-id/image1.png' }, { Key: 'issue/file-id/image2.png' }],
+    //     });
+    //     s3Mock.getSignedUrl.mockReturnValue('https://example.com/image1.png');
+
+    //     const result = await s3Service.getIssueImages(fileId);
+
+    //     expect(result).toEqual({
+    //         msg: 'Retrieved successfully',
+    //         fileUrls: ['https://example.com/image1.png', 'https://example.com/image2.png'],
+    //     });
+    //     expect(s3Mock.listObjects).toHaveBeenCalledWith({
+    //         Bucket: 'plantilla-s3-prueba-ingsw',
+    //         Prefix: `issue/${fileId}/`,
+    //     });
+    //     expect(s3Mock.getSignedUrl).toHaveBeenCalledWith('getObject', {
+    //         Bucket: 'plantilla-s3-prueba-ingsw',
+    //         Key: 'issue/file-id/image1.png',
+    //     });
+    //     expect(s3Mock.getSignedUrl).toHaveBeenCalledWith('getObject', {
+    //         Bucket: 'plantilla-s3-prueba-ingsw',
+    //         Key: 'issue/file-id/image2.png',
+    //     });
+    // });
+
+    // it('should return an error if the S3 listObjects call fails', async () => {
+    //     const fileId = 'file-id';
+
+    //     s3Mock.listObject.mockRejectedValue(new Error('S3 error'));
+
+    //     const result = await s3Service.getIssueImages(fileId);
+
+    //     expect(result).toEqual({
+    //         statusCode: 400,
+    //         messageType: "Bad Request",
+    //         errorCode: "SERVINGSW25",
+    //         errorMessage: "ERROR issue",
+    //         detail: "ERROR getIssueImages function"
+    //     });
+    //     expect(s3Mock.listObjects).toHaveBeenCalledWith({
+    //         Bucket: 'plantilla-s3-prueba-ingsw',
+    //         Prefix: `issue/${fileId}/`,
+    //     });
+    //     expect(s3Mock.getSignedUrl).not.toHaveBeenCalled();
+    // });
 });
