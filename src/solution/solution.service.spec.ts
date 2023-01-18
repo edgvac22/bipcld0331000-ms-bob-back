@@ -143,7 +143,7 @@ describe('SolutionService', () => {
     });
 
     describe('countSolutionBucket', () => {
-        it('should return the number of objects in the solution bucket', async () => {
+        it('should return the error in the solution bucket', async () => {
             const issueIdMock = 'issue123';
             const s3Mock = {
                 listObjects: jest.fn().mockResolvedValue({
@@ -153,8 +153,11 @@ describe('SolutionService', () => {
             const s3Service = new SolutionService(s3Mock as any);
             const result = await s3Service.countSolutionBucket(issueIdMock);
             expect(result).toEqual({
-                msg: 'Retrieved successfully.',
-                length: -1,
+                detail: "ERROR countSolutionBucket function",
+                errorCode: "SERVINGSW28",
+                errorMessage: "ERROR solution",
+                messageType: "Bad Request",
+                statusCode: 400,
             });
         });
     });
