@@ -3,6 +3,7 @@ import { DatabaseService } from '../db/db.service'
 import * as AWS from 'aws-sdk-mock';
 import { AddSolutionDto } from './dto/add-solution.dto';
 import { UpdateSolutionDto } from './dto/update-solution.dto';
+import { S3 } from 'aws-sdk';
 
 describe('SolutionService', () => {
 
@@ -16,9 +17,14 @@ describe('SolutionService', () => {
         { fieldname: 'file1', originalname: 'file1.jpg', buffer: Buffer.from('file1'), mimetype: 'image/jpg', size: 5 },
         { fieldname: 'file2', originalname: 'file2.jpg', buffer: Buffer.from('file2'), mimetype: 'image/jpg', size: 5 },
     ];
+    let s3UploadMock: any
 
     beforeEach(() => {
         solutionService = new SolutionService(databaseService);
+    });
+
+    beforeAll(() => {
+        s3UploadMock = jest.spyOn(S3.prototype, 'upload');
     });
 
     describe('addSolution', () => {
@@ -91,24 +97,64 @@ describe('SolutionService', () => {
         });
     });
 
-    describe('uploadSolutionFile', () => {
-        it('should upload the file', async () => {
-            const result = await solutionService.uploadSolutionFile(files[0].originalname, files[0].buffer, issueId);
-            expect(result.errorCode).toContain("SERVINGSW27");
-        });
-    });
+    describe('uploadIssueFile', () => {
+        it('should return a success message and the S3 data when the upload is successful', async () => {
+            const fileName = 'example.txt';
+            const dataBuffer = Buffer.from('example data');
+            const id = '123';
+            const s3Data = { Location: 'https://example.com/example.txt' };
 
-    describe('countSolutionBucket', () => {
-        it('should count the size of a bucket', async () => {
-            const result = await solutionService.countSolutionBucket(issueId);
-            expect(result.errorCode).toContain("SERVINGSW28");
+            s3UploadMock.mockImplementation((params: any) => {
+                return { promise: () => Promise.resolve(s3Data) };
+            });
+
+            const response = await solutionService.uploadSolutionFile(fileName, dataBuffer, id);
+
+            expect(response).toEqual({
+                msg: 'Uploaded successfully',
+                data: s3Data,
+            });
+            expect(s3UploadMock).toHaveBeenCalledWith({
+                Bucket: 'plantilla-s3-prueba-ingsw',
+                Body: dataBuffer,
+                Key: expect.stringMatching(/solution\/123\/.+-example.txt/),
+                ACL: 'public-read'
+            });
+        });
+
+        it('should return an error when the upload fails', async () => {
+            const fileName = 'example.txt';
+            const dataBuffer = Buffer.from('example data');
+            const id = '123';
+            s3UploadMock.mockImplementation((params: any) => {
+                return { promise: () => Promise.reject(new Error('S3 error')) };
+            });
+
+            const response = await solutionService.uploadSolutionFile(fileName, dataBuffer, id);
+
+            expect(response).toEqual({
+                statusCode: 400,
+                messageType: "Bad Request",
+                errorCode: "SERVINGSW27",
+                errorMessage: "ERROR solution",
+                detail: "ERROR uploadSolutionFile function"
+            });
         });
     });
 
     describe('imageSolutionBucket', () => {
-        it('should get the images of a bucket', async () => {
-            const result = await solutionService.imageSolutionBucket(issueId);
-            expect(result.errorCode).toContain("SERVINGSW29");
+        it('should return a success message when get the images of solution', async () => {
+            const issueIdMock = '123';
+            const response = await solutionService.imageSolutionBucket(issueIdMock);
+            expect(response.msg).toEqual('Retrieved successfully');
+        });
+    });
+
+    describe('countSolutionBucket', () => {
+        it('should return the count of a solution bucket', async () => {
+            const issueIdMock = '123';
+            const response = await solutionService.countSolutionBucket(issueIdMock);
+            expect(response.msg).toEqual('Retrieved successfully.');
         });
     });
 });

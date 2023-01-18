@@ -3,7 +3,7 @@ import { DatabaseService } from '../db/db.service';
 import { CreateIssueDto } from './dto/create-issue.dto';
 import { IssueController } from './issue.controller';
 import { IssueService } from './issue.service';
-import { v4 as uuid } from 'uuid'; 
+import { v4 as uuid } from 'uuid';
 
 describe('AppController', () => {
     let issueController: IssueController;
