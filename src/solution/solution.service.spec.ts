@@ -94,21 +94,21 @@ describe('SolutionService', () => {
     describe('uploadSolutionFile', () => {
         it('should upload the file', async () => {
             const result = await solutionService.uploadSolutionFile(files[0].originalname, files[0].buffer, issueId);
-            expect(result.msg).toContain("Uploaded successfully");
+            expect(result.errorCode).toContain("SERVINGSW27");
         });
     });
 
     describe('countSolutionBucket', () => {
         it('should count the size of a bucket', async () => {
             const result = await solutionService.countSolutionBucket(issueId);
-            expect(result.msg).toContain("Retrieved successfully.");
+            expect(result.errorCode).toContain("SERVINGSW28");
         });
     });
 
     describe('imageSolutionBucket', () => {
         it('should get the images of a bucket', async () => {
             const result = await solutionService.imageSolutionBucket(issueId);
-            expect(result.msg).toContain("Retrieved successfully");
+            expect(result.errorCode).toContain("SERVINGSW29");
         });
     });
 });

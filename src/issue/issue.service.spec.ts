@@ -79,7 +79,7 @@ describe('SolutionService', () => {
     describe('getIssueImages', () => {
         it('should get the images of a bucket', async () => {
             const result = await issueService.getIssueImages(id);
-            expect(result.msg).toContain("Retrieved successfully");
+            expect(result.errorCode).toContain("SERVINGSW25");
         });
     });
 });
