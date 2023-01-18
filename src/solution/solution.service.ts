@@ -184,15 +184,17 @@ export class SolutionService {
     }
 
     async uploadSolutionFile(fileName: string, dataBuffer: Buffer, issueId: string) {
-        const params = {
-            Bucket: 'plantilla-s3-prueba-ingsw',
-            Body: dataBuffer,
-            Key: `solution/${issueId}/${uuid()}-${fileName}`,
-            ACL: 'public-read'
-        }
         try {
-            const uploadResult = await this.s3.upload(params).promise();
-            return uploadResult;
+            const params = {
+                Bucket: 'plantilla-s3-prueba-ingsw',
+                Body: dataBuffer,
+                Key: `solution/${issueId}/${uuid()}-${fileName}`,
+                ACL: 'public-read'
+            }
+            return {
+                msg: 'Uploaded successfully',
+                data: await this.s3.upload(params).promise(),
+            }
         } catch (err) {
             return {
                 statusCode: 400,
@@ -245,7 +247,10 @@ export class SolutionService {
                 });
                 fileUrls.push(fileUrl);
             }
-            return fileUrls;
+            return {
+                msg: 'Retrieved successfully',
+                fileUrls: fileUrls,
+            }
         } catch (err) {
             return {
                 statusCode: 400,

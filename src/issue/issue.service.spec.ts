@@ -9,6 +9,11 @@ describe('SolutionService', () => {
     let issueService: IssueService;
     let createIssueDto: CreateIssueDto;
     let issueId: "aksjdfk-12313-askdfj";
+    const files: any[] = [
+        { fieldname: 'file1', originalname: 'file1.jpg', buffer: Buffer.from('file1'), mimetype: 'image/jpg', size: 5 },
+        { fieldname: 'file2', originalname: 'file2.jpg', buffer: Buffer.from('file2'), mimetype: 'image/jpg', size: 5 },
+    ];
+    let id: "asjdfkajsdf-asdfasdf-123123"
 
     beforeEach(() => {
         issueService = new IssueService(databaseService);
@@ -61,6 +66,20 @@ describe('SolutionService', () => {
         it('getIssue function error', async function () {
             const result = await issueService.getIssue(issueId);
             expect(result.errorCode).toContain("SERVINGSW09");
+        });
+    });
+
+    describe('uploadIssueFile', () => {
+        it('should upload the file', async () => {
+            const result = await issueService.uploadIssueFile(files[0].originalname, files[0].buffer, issueId);
+            expect(result.errorCode).toContain("SERVINGSW26");
+        });
+    });
+
+    describe('getIssueImages', () => {
+        it('should get the images of a bucket', async () => {
+            const result = await issueService.getIssueImages(id);
+            expect(result.msg).toContain("Retrieved successfully");
         });
     });
 });

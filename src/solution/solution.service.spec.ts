@@ -12,6 +12,10 @@ describe('SolutionService', () => {
     let updateSolutionDto: UpdateSolutionDto
     let issueId: "212319283-asdfasd-123kajs";
     let solutionId: "1231j-asdfasd-123kajs";
+    const files: any[] = [
+        { fieldname: 'file1', originalname: 'file1.jpg', buffer: Buffer.from('file1'), mimetype: 'image/jpg', size: 5 },
+        { fieldname: 'file2', originalname: 'file2.jpg', buffer: Buffer.from('file2'), mimetype: 'image/jpg', size: 5 },
+    ];
 
     beforeEach(() => {
         solutionService = new SolutionService(databaseService);
@@ -84,6 +88,27 @@ describe('SolutionService', () => {
         it('detailSolution function error', async function () {
             const result = await solutionService.detailSolution(solutionId);
             expect(result.errorCode).toContain("SERVINGSW08");
+        });
+    });
+
+    describe('uploadSolutionFile', () => {
+        it('should upload the file', async () => {
+            const result = await solutionService.uploadSolutionFile(files[0].originalname, files[0].buffer, issueId);
+            expect(result.msg).toContain("Uploaded successfully");
+        });
+    });
+
+    describe('countSolutionBucket', () => {
+        it('should count the size of a bucket', async () => {
+            const result = await solutionService.countSolutionBucket(issueId);
+            expect(result.msg).toContain("Retrieved successfully.");
+        });
+    });
+
+    describe('imageSolutionBucket', () => {
+        it('should get the images of a bucket', async () => {
+            const result = await solutionService.imageSolutionBucket(issueId);
+            expect(result.msg).toContain("Retrieved successfully");
         });
     });
 });

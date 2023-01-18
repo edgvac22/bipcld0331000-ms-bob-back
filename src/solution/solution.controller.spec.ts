@@ -25,6 +25,9 @@ describe('AppController', () => {
                         updateSolution: jest.fn().mockReturnValue('Solution updated successfully.'),
                         removeSolution: jest.fn().mockReturnValue('Solution deleted successfully.'),
                         detailSolution: jest.fn().mockReturnValue('Retrieved successfully'),
+                        imageSolutionBucket: jest.fn().mockReturnValue('Retrieved successfully'),
+                        uploadSolutionFile: jest.fn().mockReturnValue('Uploaded successfully'),
+                        countSolutionBucket: jest.fn().mockReturnValue('Retrieved successfully'),
                     },
                 },
             ],
@@ -66,6 +69,24 @@ describe('AppController', () => {
         it('should get solution detail"', () => {
             solutionService.detailSolution = jest.fn().mockReturnValueOnce('Retrieved successfully');
             expect(solutionController.detailSolution(solutionId)).toBe('Retrieved successfully');
+        });
+    });
+
+    it('should upload files to S3', async () => {
+        jest.spyOn(solutionService, 'uploadSolutionFile').mockImplementation();
+
+        const files: any[] = [
+            { fieldname: 'file1', originalname: 'file1.jpg', buffer: Buffer.from('file1'), mimetype: 'image/jpg', size: 5 },
+            { fieldname: 'file2', originalname: 'file2.jpg', buffer: Buffer.from('file2'), mimetype: 'image/jpg', size: 5 },
+        ];
+
+        const result = await solutionController.uploadSolutionFile(files, issueId);
+
+        expect(solutionService.uploadSolutionFile).toHaveBeenCalledTimes(2);
+        expect(result).toEqual({
+            msg: 'Los archivos se han sido subido exitosamente',
+            statusCode: 201,
+            length: 2,
         });
     });
 });
