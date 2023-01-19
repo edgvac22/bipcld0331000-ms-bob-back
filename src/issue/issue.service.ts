@@ -119,7 +119,7 @@ export class IssueService {
   async uploadIssueFile(fileName: string, dataBuffer: Buffer, id: string) {
     try {
       const params = {
-        Bucket: 'example',
+        Bucket: 'plantilla-s3-prueba-ingsw',
         Body: dataBuffer,
         Key: `issue/${id}/${uuid()}-${fileName}`,
         ACL: 'public-read'
@@ -134,7 +134,7 @@ export class IssueService {
         messageType: "Bad Request",
         errorCode: "SERVINGSW26",
         errorMessage: "ERROR issue",
-        detail: "ERROR uploadFile function"
+        detail: "ERROR uploadIssueFile function"
       }
     }
   }

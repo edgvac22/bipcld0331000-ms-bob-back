@@ -27,7 +27,7 @@ describe('AppController', () => {
                         detailSolution: jest.fn().mockReturnValue('Retrieved successfully'),
                         imageSolutionBucket: jest.fn().mockReturnValue('Retrieved successfully'),
                         uploadSolutionFile: jest.fn().mockReturnValue('Uploaded successfully'),
-                        countSolutionBucket: jest.fn().mockReturnValue('Retrieved successfully'),
+                        countSolutionBucket: jest.fn().mockReturnValue('Retrieved successfully.'),
                     },
                 },
             ],
@@ -79,14 +79,38 @@ describe('AppController', () => {
             { fieldname: 'file1', originalname: 'file1.jpg', buffer: Buffer.from('file1'), mimetype: 'image/jpg', size: 5 },
             { fieldname: 'file2', originalname: 'file2.jpg', buffer: Buffer.from('file2'), mimetype: 'image/jpg', size: 5 },
         ];
-
         const result = await solutionController.uploadSolutionFile(files, issueId);
-
         expect(solutionService.uploadSolutionFile).toHaveBeenCalledTimes(2);
         expect(result).toEqual({
             msg: 'Los archivos se han sido subido exitosamente',
             statusCode: 201,
             length: 2,
+        });
+    });
+
+    describe('countSolutionBucket', () => {
+        it('should return the number of objects in the bucket', async () => {
+            const s3Mock = {
+                listObjects: jest.fn().mockResolvedValue({
+                    Contents: [{}, {}, {}]
+                })
+            };
+            solutionService.s3 = s3Mock as any;
+            const result = await solutionController.countSolutionBucket('issue-1');
+            expect(result).toEqual("Retrieved successfully.");
+        });
+    });
+
+    describe('imageSolutionBucket', () => {
+        it('should return the number of objects in the bucket', async () => {
+            const s3Mock = {
+                listObjects: jest.fn().mockResolvedValue({
+                    Contents: [{}, {}, {}]
+                })
+            };
+            solutionService.s3 = s3Mock as any;
+            const result = await solutionController.imageSolutionBucket('issue-1');
+            expect(result).toEqual("Retrieved successfully");
         });
     });
 });

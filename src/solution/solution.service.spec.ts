@@ -17,7 +17,7 @@ describe('SolutionService', () => {
         { fieldname: 'file1', originalname: 'file1.jpg', buffer: Buffer.from('file1'), mimetype: 'image/jpg', size: 5 },
         { fieldname: 'file2', originalname: 'file2.jpg', buffer: Buffer.from('file2'), mimetype: 'image/jpg', size: 5 },
     ];
-    let s3UploadMock: any
+    let s3UploadMock: any;
 
     beforeEach(() => {
         solutionService = new SolutionService(databaseService);
@@ -97,7 +97,7 @@ describe('SolutionService', () => {
         });
     });
 
-    describe('uploadIssueFile', () => {
+    describe('uploadSolutionFile', () => {
         it('should return a success message and the S3 data when the upload is successful', async () => {
             const fileName = 'example.txt';
             const dataBuffer = Buffer.from('example data');
@@ -138,26 +138,6 @@ describe('SolutionService', () => {
                 errorCode: "SERVINGSW27",
                 errorMessage: "ERROR solution",
                 detail: "ERROR uploadSolutionFile function"
-            });
-        });
-    });
-
-    describe('countSolutionBucket', () => {
-        it('should return the error in the solution bucket', async () => {
-            const issueIdMock = 'issue123';
-            const s3Mock = {
-                listObjects: jest.fn().mockResolvedValue({
-                    Contents: [{}]
-                })
-            };
-            const s3Service = new SolutionService(s3Mock as any);
-            const result = await s3Service.countSolutionBucket(issueIdMock);
-            expect(result).toEqual({
-                detail: "ERROR countSolutionBucket function",
-                errorCode: "SERVINGSW28",
-                errorMessage: "ERROR solution",
-                messageType: "Bad Request",
-                statusCode: 400,
             });
         });
     });

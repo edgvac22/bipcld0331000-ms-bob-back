@@ -101,7 +101,7 @@ describe('SolutionService', () => {
                 data: s3Data,
             });
             expect(s3UploadMock).toHaveBeenCalledWith({
-                Bucket: 'example',
+                Bucket: 'plantilla-s3-prueba-ingsw',
                 Body: dataBuffer,
                 Key: expect.stringMatching(/issue\/123\/.+-example.txt/),
                 ACL: 'public-read'
@@ -123,57 +123,8 @@ describe('SolutionService', () => {
                 messageType: "Bad Request",
                 errorCode: "SERVINGSW26",
                 errorMessage: "ERROR issue",
-                detail: "ERROR uploadFile function"
+                detail: "ERROR uploadIssueFile function"
             });
         });
     });
-
-    // it('should return a list of file URLs', async () => {
-    //     const fileId = 'file-id';
-
-    //     s3Mock.listObjects.mockResolvedValue({
-    //         Contents: [{ Key: 'issue/file-id/image1.png' }, { Key: 'issue/file-id/image2.png' }],
-    //     });
-    //     s3Mock.getSignedUrl.mockReturnValue('https://example.com/image1.png');
-
-    //     const result = await s3Service.getIssueImages(fileId);
-
-    //     expect(result).toEqual({
-    //         msg: 'Retrieved successfully',
-    //         fileUrls: ['https://example.com/image1.png', 'https://example.com/image2.png'],
-    //     });
-    //     expect(s3Mock.listObjects).toHaveBeenCalledWith({
-    //         Bucket: 'plantilla-s3-prueba-ingsw',
-    //         Prefix: `issue/${fileId}/`,
-    //     });
-    //     expect(s3Mock.getSignedUrl).toHaveBeenCalledWith('getObject', {
-    //         Bucket: 'plantilla-s3-prueba-ingsw',
-    //         Key: 'issue/file-id/image1.png',
-    //     });
-    //     expect(s3Mock.getSignedUrl).toHaveBeenCalledWith('getObject', {
-    //         Bucket: 'plantilla-s3-prueba-ingsw',
-    //         Key: 'issue/file-id/image2.png',
-    //     });
-    // });
-
-    // it('should return an error if the S3 listObjects call fails', async () => {
-    //     const fileId = 'file-id';
-
-    //     s3Mock.listObject.mockRejectedValue(new Error('S3 error'));
-
-    //     const result = await s3Service.getIssueImages(fileId);
-
-    //     expect(result).toEqual({
-    //         statusCode: 400,
-    //         messageType: "Bad Request",
-    //         errorCode: "SERVINGSW25",
-    //         errorMessage: "ERROR issue",
-    //         detail: "ERROR getIssueImages function"
-    //     });
-    //     expect(s3Mock.listObjects).toHaveBeenCalledWith({
-    //         Bucket: 'plantilla-s3-prueba-ingsw',
-    //         Prefix: `issue/${fileId}/`,
-    //     });
-    //     expect(s3Mock.getSignedUrl).not.toHaveBeenCalled();
-    // });
 });
