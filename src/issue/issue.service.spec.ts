@@ -19,6 +19,7 @@ describe('SolutionService', () => {
     let s3UploadMock: any;
     let s3Mock: any;
     let s3Service: IssueService;
+    let fileId: "123"
 
     beforeEach(() => {
         issueService = new IssueService(databaseService);
@@ -124,6 +125,16 @@ describe('SolutionService', () => {
                 errorCode: "SERVINGSW26",
                 errorMessage: "ERROR issue",
                 detail: "ERROR uploadIssueFile function"
+            });
+        });
+    });
+
+    describe('getIssueImages', () => {
+        it('should get the urls of a bucket', async () => {
+            AWS.mock('S3', 'getSignedUrl', function (params: any, callback: any) {
+                return callback(null, {
+                    msg: "Retrieved successfully",
+                });
             });
         });
     });

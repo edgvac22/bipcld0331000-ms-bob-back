@@ -18,9 +18,11 @@ describe('SolutionService', () => {
         { fieldname: 'file2', originalname: 'file2.jpg', buffer: Buffer.from('file2'), mimetype: 'image/jpg', size: 5 },
     ];
     let s3UploadMock: any;
+    let countSolutionBucket: any;
 
     beforeEach(() => {
         solutionService = new SolutionService(databaseService);
+        countSolutionBucket = (new SolutionService(databaseService)).countSolutionBucket;
     });
 
     beforeAll(() => {
@@ -139,6 +141,34 @@ describe('SolutionService', () => {
                 errorMessage: "ERROR solution",
                 detail: "ERROR uploadSolutionFile function"
             });
+        });
+    });
+
+    describe('countSolutionBucket', () => {
+        it('should count the size of a bucket', async () => {
+            AWS.mock('S3', 'listObjects', function (params: any, callback: any) {
+                return callback(null, {
+                    msg: "Retrieved successfully.",
+                });
+            });
+        });
+        it('countSolutionBucket function error', async function () {
+            const result = await solutionService.countSolutionBucket(issueId);
+            expect(result.errorCode).toContain("SERVINGSW28");
+        });
+    });
+
+    describe('imageSolutionBucket', () => {
+        it('should get the urls of a bucket', async () => {
+            AWS.mock('S3', 'getSignedUrl', function (params: any, callback: any) {
+                return callback(null, {
+                    msg: "Retrieved successfully",
+                });
+            });
+        });
+        it('countSolutionBucket function error', async function () {
+            const result = await solutionService.imageSolutionBucket(issueId);
+            expect(result.errorCode).toContain("SERVINGSW29");
         });
     });
 });
