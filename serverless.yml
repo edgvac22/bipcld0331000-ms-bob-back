@@ -1,4 +1,4 @@
-service: ingsw-bob-api-rest
+service: bipcld0331000-ms-bob-back
 
 plugins:
   - serverless-iam-roles-per-function
@@ -28,7 +28,8 @@ provider:
       - ${opt:proyecto,'ingsw'}-${opt:stage}-api-key
 
 functions:
-  putItemBob: 
+  create-issue: 
+    description: Issue Creation Orchestrator
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -49,7 +50,8 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  putItemEnvironmentOrArea: 
+  create-area: 
+    description: Area Creation Orchestrator
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -69,6 +71,16 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  create-environment: 
+    description: Environment Creation Orchestrator
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.ENVIRONMENT_AREA_TABLE}'
+    events:
       - http:
           method: post
           path: /environment/new
@@ -82,8 +94,8 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-
-  updateItem:
+  create-solution:
+    description: Solution Creation Orchestrator
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -103,6 +115,16 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  update-solution:
+    description: Solution Modification Orchestrator
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}'
+    events:
       - http:
           method: post
           path: /solution/update/{issueId}
@@ -115,6 +137,16 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  remove-solution:
+    description: Solution Removal Orchestrator
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}'
+    events:
       - http:
           method: post
           path: /solution/remove/{issueId}
@@ -128,7 +160,8 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  verifyIndex: 
+  list-issue: 
+    description: Issue Listing Orchestrator
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -148,18 +181,16 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
-      - http:
-          method: post
-          path: /issue
-          cors:
-            methods: 
-              - POST
-              - OPTIONS
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amzn-Trace-Id
-          integration: lambda-proxy
+
+  list-solution: 
+    description: Solution Listing Orchestrator
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.BOB_TABLE}/index/verify-index'
+    events:
       - http:
           method: get
           path: /solution/list
@@ -173,7 +204,8 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  solutionIdIndex: 
+  detail-solution: 
+    description: Detail Orchestrator of a Solution
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -194,7 +226,8 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  listAreaAndEnvironment: 
+  list-area: 
+    description: Area Listing Orchestrator
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -214,6 +247,16 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  list-environment: 
+    description: Environment Listing Orchestrator
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: 'arn:aws:dynamodb:${opt:region}:*:table/${self:provider.environment.ENVIRONMENT_AREA_TABLE}/index/type-index'
+    events:
       - http:
           method: get
           path: /environment/list
@@ -227,7 +270,8 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  getIssue: 
+  detail-issue: 
+    description: Detail Orchestrator of an Issue
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -248,7 +292,8 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  getImagesOrCount: 
+  obtain-issue-images: 
+    description: Image Issue Fetch Orchestrator
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -271,6 +316,19 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  obtain-solution-images: 
+    description: Image Solution Fetch Orchestrator
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "s3:ListBucket"
+          - "s3:GetObject"
+        Resource:
+          - "arn:aws:s3:::plantilla-s3-prueba-ingsw"
+          - "arn:aws:s3:::plantilla-s3-prueba-ingsw/*"
+    events:
       - http:
           method: get
           path: /solution/image/{issueId}
@@ -283,6 +341,19 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  count-solution-images: 
+    description: Solution Count Orchestrator
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "s3:ListBucket"
+          - "s3:GetObject"
+        Resource:
+          - "arn:aws:s3:::plantilla-s3-prueba-ingsw"
+          - "arn:aws:s3:::plantilla-s3-prueba-ingsw/*"
+    events:
       - http:
           method: get
           path: /solution/count/{issueId}
@@ -296,7 +367,8 @@ functions:
               - X-Amzn-Trace-Id
           integration: lambda-proxy
 
-  uploadFiles: 
+  upload-issue-images: 
+    description: Issue Upload Images Orchestrator
     handler: dist/serverless.handler
     iamRoleStatements:
       - Effect: Allow
@@ -319,6 +391,19 @@ functions:
               - Authorization
               - X-Amzn-Trace-Id
           integration: lambda-proxy
+
+  upload-solution-images: 
+    description: Solution Upload Images Orchestrator
+    handler: dist/serverless.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "s3:PutObject"
+          - "s3:PutObjectAcl"
+        Resource:
+          - "arn:aws:s3:::plantilla-s3-prueba-ingsw"
+          - "arn:aws:s3:::plantilla-s3-prueba-ingsw/*"
+    events:
       - http:
           method: post
           path: /solution/file/{issueId}

@@ -1,4 +1,4 @@
-import { IsString, IsOptional, MinLength, IsDefined, IsArray } from 'class-validator';
+import { IsString, MinLength, IsDefined } from 'class-validator';
 
 export class CreateIssueDto {
   @IsDefined({
