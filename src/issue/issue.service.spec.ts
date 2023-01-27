@@ -68,7 +68,7 @@ describe('SolutionService', () => {
         });
     });
 
-    describe('getIssue', () => {
+    describe('detailIssue', () => {
 
         it('should return info of an specific issue', async () => {
             AWS.mock('DynamoDB.DocumentClient', 'get', function (params: any, callback: any) {
@@ -78,8 +78,8 @@ describe('SolutionService', () => {
             });
         });
 
-        it('getIssue function error', async function () {
-            const result = await issueService.getIssue(issueId);
+        it('detailIssue function error', async function () {
+            const result = await issueService.detailIssue(issueId);
             expect(result.errorCode).toContain("SERVINGSW09");
         });
     });

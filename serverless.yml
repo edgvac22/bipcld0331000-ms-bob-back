@@ -92,7 +92,7 @@ functions:
               - Content-Type
               - Authorization
               - X-Amzn-Trace-Id
-          integration: lambda-proxy
+          integration: lambda
 
   create-solution:
     description: Solution Creation Orchestrator

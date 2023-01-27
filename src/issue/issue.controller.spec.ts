@@ -47,10 +47,10 @@ describe('AppController', () => {
         });
     });
 
-    describe('getIssue', () => {
+    describe('detailIssue', () => {
         it('should return "Retrieved successfully"', () => {
-            issueService.getIssue = jest.fn().mockReturnValueOnce('Retrieved successfully');
-            expect(issueController.getIssue(issueId)).toBe('Retrieved successfully');
+            issueService.detailIssue = jest.fn().mockReturnValueOnce('Retrieved successfully');
+            expect(issueController.detailIssue(issueId)).toBe('Retrieved successfully');
         });
     });
 
