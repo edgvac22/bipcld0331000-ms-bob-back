@@ -1,0 +1,722 @@
+openapi: 3.0.0
+info:
+  title: BOB - Base de Conocimiento Banistmo
+  description: 'Base de conocimiento para Ingeniería de TI.'
+  contact:
+    email: edgardo.vaca@banistmo.com
+  version: 1.0.0
+servers:
+  - url: 'https://api.banistmodev.com'
+    description: Integration
+  - url: 'https://api.banistmolabs.com'
+    description: QA
+  - url: 'https://api.banistmo.com'
+    description: Production
+  
+tags:
+  - name: issue
+    description: everything about issue
+    
+paths:
+
+  '/issue':
+    post:
+      tags:
+        - issue
+      summary: Find issue
+      description: Find an issue by area, environment and detail
+      operationId: findIssue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/findIssue'
+      responses:
+        200:
+          description: Request Successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/findIssues'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 400
+                messageType: Error
+                errorMessage: Error con los parametros de entrada.
+        404:
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 404
+                messageType: Error
+                errorMessage: El recurso no esta disponible.
+        500:
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 500
+                messageType: Error
+                errorMessage: Error Interno.
+                
+  '/issue/{solutionId}':
+    get:
+      tags:
+        - issue
+      summary: Detail issue
+      description: View issue detail
+      operationId: detailIssue
+      parameters:
+        - name: solutionId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: XAKSN12387ZN
+      responses:
+        200:
+          description: Request Successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/solutionIdRS'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 400
+                messageType: Error
+                errorMessage: Error con los parametros de entrada.
+        404:
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 404
+                messageType: Error
+                errorMessage: El recurso no esta disponible.
+        500:
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 500
+                messageType: Error
+                errorMessage: Error Interno.
+                
+  '/issue/new':
+    post:
+      tags:
+        - issue
+      summary: Create issue
+      description: Create an issue
+      operationId: newIssue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newIssue'
+      responses:
+        200:
+          description: Request Successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successRS'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 400
+                messageType: Error
+                errorMessage: Error con los parametros de entrada.
+        404:
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 404
+                messageType: Error
+                errorMessage: El recurso no esta disponible.
+        500:
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 500
+                messageType: Error
+                errorMessage: Error Interno.
+
+  '/issue/list':
+    get:
+      tags:
+        - issue
+      summary: List issue
+      description: List issue to add the solution
+      operationId: listIssue
+      responses:
+        200:
+          description: Request Successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/listIssue'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 400
+                messageType: Error
+                errorMessage: Error con los parametros de entrada.
+        404:
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 404
+                messageType: Error
+                errorMessage: El recurso no esta disponible.
+        500:
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 500
+                messageType: Error
+                errorMessage: Error Interno.
+  '/issue/{issueId}/new':
+    post:
+      tags:
+        - issue
+      summary: Add solution
+      description: Add solution to issue.
+      operationId: addSolution
+      parameters:
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: NASJND1238172N
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/addSolution'
+      responses:
+        200:
+          description: Request Successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successRS'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 400
+                messageType: Error
+                errorMessage: Error con los parametros de entrada.
+        404:
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 404
+                messageType: Error
+                errorMessage: El recurso no esta disponible.
+        500:
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 500
+                messageType: Error
+                errorMessage: Error Interno.
+                
+  '/issue/solution/list':
+    get:
+      tags:
+        - issue
+      summary: List solution
+      description: List solutions
+      operationId: listSolution
+      responses:
+        200:
+          description: Request Successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/listSolution'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 400
+                messageType: Error
+                errorMessage: Error con los parametros de entrada.
+        404:
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 404
+                messageType: Error
+                errorMessage: El recurso no esta disponible.
+        500:
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 500
+                messageType: Error
+                errorMessage: Error Interno.
+                
+  '/issue/{issueId}/update':
+    put:
+      tags:
+        - issue
+      summary: Update solution
+      description: Update solution
+      operationId: updateSolution
+      parameters:
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: XAKSN12387ZN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateSolution'
+      responses:
+        200:
+          description: Request Successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successRS'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 400
+                messageType: Error
+                errorMessage: Error con los parametros de entrada.
+        404:
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 404
+                messageType: Error
+                errorMessage: El recurso no esta disponible.
+        500:
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 500
+                messageType: Error
+                errorMessage: Error Interno.
+                
+  '/issue/{issueId}/remove':
+    delete:
+      tags:
+        - issue
+      summary: Remove solution
+      description: Remove specific solution
+      operationId: removeSolution
+      parameters:
+        - name: issueId
+          in: path
+          description: The id that needs to be removed
+          required: true
+          schema:
+            type: string
+            example: XAKSN12387ZN
+      responses:
+        200:
+          description: Request Successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successRS'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 400
+                messageType: Error
+                errorMessage: Error con los parametros de entrada.
+        404:
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 404
+                messageType: Error
+                errorMessage: El recurso no esta disponible.
+        500:
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorRS'
+              example:
+                statusCode: 500
+                messageType: Error
+                errorMessage: Error Interno.
+
+components:
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+          
+    findIssue:
+      required:
+        - area
+        - environment
+        - issueDetail
+      description: Object that has the request find issue
+      type: object
+      properties:
+        area:
+          type: string
+          example: Ingeniería de TI
+        environment: 
+          type: string
+          example: Otro
+        issueDetail:
+          type: string
+          example: ¿Cuál es el link de la wiki de Ingeniería de Software?
+          
+    findIssues: 
+      description: Object that has the request of a success issue
+      type: object
+      required:
+        - successRS
+      properties:
+        successRS:
+          $ref: '#/components/schemas/successRS'
+        issue:
+          type: array
+          items:
+            $ref: '#/components/schemas/solutionRS'
+    
+    solutionRS:
+      description: Object that return a success issue
+      type: object
+      properties:
+        issueId:
+          type: string
+          example: A8000J1FM12873
+        issueUser:
+          type: string
+          example: evaca
+        area:
+          type: string
+          example: Ingenieria de Software
+        environment:
+          type: string
+          example: Otro
+        issueDetail:
+          type: string
+          example: no encuentro la wiki de Ingenieria de Software
+        issueAttachment:
+          type: object
+          example:
+            - wiki.png
+            - wiki2.jpeg
+        dateCreate:
+          type: string
+          example: 2022-09-27:10:57:51
+        verify:
+          type: string
+          example: yes
+        solutionId:
+            type: string
+            example: XAKSN12387ZN
+        solutionUser:
+          type: string
+          example: jcamilo
+        solutionTitle:
+          type: string
+          example: Wiki de Ingeniería de Software
+        solutionDetail:
+          type: string
+          example: https://dev.azure.com/banistmo/VP%20Servicios%20Corporativos/_wiki/wikis/VP-Servicios-Corporativos.wiki/2806/6.-Ingenier%C3%ADa-de-Software
+        solutionAttachment:
+          type: object
+          example: 
+            - wiki.png
+            - wiki-response.jpeg
+        dateUpdated:
+          type: string
+          example: 2022-09-27:11:06:26
+                
+    solutionIdRS:
+      description: Object that return of query of solutionId
+      type: object
+      properties:
+        issueId:
+          type: string
+          example: A8000J1FM12873
+        area:
+          type: string
+          example: Ingenieria de Software
+        environment:
+          type: string
+          example: Otro
+        solutionId:
+            type: string
+            example: XAKSN12387ZN
+        solutionUser:
+          type: string
+          example: jcamilo
+        solutionTitle:
+          type: string
+          example: Wiki de Ingeniería de Software
+        solutionDetail:
+          type: string
+          example: https://dev.azure.com/banistmo/VP%20Servicios%20Corporativos/_wiki/wikis/VP-Servicios-Corporativos.wiki/2806/6.-Ingenier%C3%ADa-de-Software
+        solutionAttachment:
+          type: object
+          example: 
+            - wiki.png
+            - wiki-response.jpeg
+                
+    newIssue:
+      description: Object that has the request of create issue
+      type: object
+      properties: 
+        area:
+          type: string
+          example: Ingeniería de TI
+        environment:
+          type: string
+          example: Otro  
+        issueDetail: 
+          type: string
+          example: estuve buscando y no encuentro la wiki de ingenieria de software
+        issueAttachment: 
+          type: object
+          example: 
+            - wiki.png
+            - wiki-prueba.jpeg
+          
+    listIssue: 
+      description: Object that has list of issues to verify
+      type: object
+      required:
+        - successRS
+      properties:
+        successRS:
+          $ref: '#/components/schemas/successRS'
+        issue:
+          type: array
+          items:
+            $ref: '#/components/schemas/checkIssueRS'
+            
+    checkIssueRS:
+      description: Object that return the objects of the issues to verify
+      type: object
+      properties:
+        issueId:
+          type: string
+          example: NASJND1238172N
+        issueUser:
+          type: string
+          example: mmoreno
+        area:
+          type: string
+          example: Ingenieria de Software
+        environment: 
+          type: string
+          example: Otro
+        issueDetail:
+          type: string
+          example: No encuentro la wiki de Ingenieria de Software
+        issueAttachment:
+          type: object
+          example: 
+            - wiki.png
+            - wiki-test.jpeg
+        dateCreate:
+          type: string
+          example: 2022-09-28:13:27:41
+        verify:
+          type: string
+          example: no
+              
+          
+    listSolution:
+      description: Object that has the list of all the solutions
+      type: object
+      required:
+        - successRS
+      properties:
+        successRS:
+          $ref: '#/components/schemas/successRS'
+        issue:
+          type: array
+          items:
+            $ref: '#/components/schemas/solutionRS'
+            
+    addSolution:
+      required:
+        - solutionTitle
+        - area
+        - environment
+        - solutionDetail
+        - solutionAttachment
+      description: Object that has the body of create solution
+      type: object
+      properties:
+        solutionTitle:
+          type: string
+          example: Wiki de Ingeniería de Software
+        area:
+          type: string
+          example: Ingeniería de TI
+        environment: 
+          type: string
+          example: Otro
+        solutionDetail:
+          type: string
+          example: https://dev.azure.com/banistmo/VP%20Servicios%20Corporativos/_wiki/wikis/VP-Servicios-Corporativos.wiki/2806/6.-Ingenier%C3%ADa-de-Software
+        solutionAttachment:
+          type: object
+          example: 
+            - wiki-response.jpeg
+          
+    updateSolution:
+      description: Object that has the body of modify solution
+      type: object
+      properties:
+        solutionTitle:
+          type: string
+          example: ¿Cuál es el link de su wiki?
+        area:
+          type: string
+          example: Ingeniería de Software
+        environment: 
+          type: string
+          example: Otro
+        solutionDetail:
+          type: string
+          example: El link es https://dev.azure.com/banistmo/VP%20Servicios%20Corporativos/_wiki/wikis/VP-Servicios-Corporativos.wiki/2806/6.-Ingenier%C3%ADa-de-Software
+        solutionAttachment:
+          type: object
+          example: 
+            - wiki.jpeg
+            - wiki-3.png
+
+    successRS:
+      description: Object that has the success information of the function
+      type: object
+      properties:
+        rqUID:
+          description: Unique identifier of the transaction that allows to keep a trace of the operation
+          type: string
+          example: 62d9c0262a029b61ef4c8fc7
+        status:
+          $ref: '#/components/schemas/Status'
+
+    ErrorRS:
+      description: Object that has error information
+      type: object
+      properties:
+        rqUID:
+          description: Unique identifier of the transaction that allows to keep a trace of the operation
+          type: string
+          example: 62d9c0262a029b61ef4c8fc7
+        status:
+          $ref: '#/components/schemas/Status'
+
+    Status:
+      description: Status response
+      type: object
+      properties:
+        code:
+          description: Status code HTTP
+          type: integer
+        message:
+          description: Status message HTTP.
+          type: string
+          example: OK
+        detail:
+          description: Status detail
+          type: string
+          example: Solicitud exitosa
+
+security:
+  - BearerAuth: []
