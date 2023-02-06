@@ -39,7 +39,7 @@ describe('SolutionService', () => {
         });
         it('addSolution function error', async function () {
             const result = await solutionService.addSolution(issueId, addSolutionDto);
-            expect(result.errorCode).toContain("SERVINGSW04");
+            expect(result.errorMessage).toContain("Internal error.");
         });
     });
 
@@ -53,7 +53,7 @@ describe('SolutionService', () => {
         });
         it('listSolution function error', async function () {
             const result = await solutionService.listSolution();
-            expect(result.errorCode).toContain("SERVINGSW05");
+            expect(result.errorMessage).toContain("Internal error.");
         });
     });
 
@@ -67,7 +67,7 @@ describe('SolutionService', () => {
         });
         it('updateSolution function error', async function () {
             const result = await solutionService.updateSolution(issueId, updateSolutionDto);
-            expect(result.errorCode).toContain("SERVINGSW06");
+            expect(result.errorMessage).toContain("Internal error.");
         });
     });
 
@@ -81,7 +81,7 @@ describe('SolutionService', () => {
         });
         it('removeSolution function error', async function () {
             const result = await solutionService.removeSolution(issueId);
-            expect(result.errorCode).toContain("SERVINGSW07");
+            expect(result.errorMessage).toContain("Internal error.");
         });
     });
 
@@ -95,7 +95,7 @@ describe('SolutionService', () => {
         });
         it('detailSolution function error', async function () {
             const result = await solutionService.detailSolution(solutionId);
-            expect(result.errorCode).toContain("SERVINGSW08");
+            expect(result.errorMessage).toContain("Internal error.");
         });
     });
 
@@ -135,11 +135,9 @@ describe('SolutionService', () => {
             const response = await solutionService.uploadSolutionFile(fileName, dataBuffer, id);
 
             expect(response).toEqual({
-                statusCode: 400,
-                messageType: "Bad Request",
-                errorCode: "SERVINGSW27",
-                errorMessage: "ERROR solution",
-                detail: "ERROR uploadSolutionFile function"
+                statusCode: 500,
+                messageType: "Error",
+                errorMessage: "Internal error.",
             });
         });
     });
@@ -154,7 +152,7 @@ describe('SolutionService', () => {
         });
         it('countSolutionBucket function error', async function () {
             const result = await solutionService.countSolutionBucket(issueId);
-            expect(result.errorCode).toContain("SERVINGSW28");
+            expect(result.errorMessage).toContain("Internal error.");
         });
     });
 
@@ -168,7 +166,7 @@ describe('SolutionService', () => {
         });
         it('countSolutionBucket function error', async function () {
             const result = await solutionService.imageSolutionBucket(issueId);
-            expect(result.errorCode).toContain("SERVINGSW29");
+            expect(result.errorMessage).toContain("Internal error.");
         });
     });
 });

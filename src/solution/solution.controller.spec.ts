@@ -82,7 +82,8 @@ describe('AppController', () => {
         const result = await solutionController.uploadSolutionFile(files, issueId);
         expect(solutionService.uploadSolutionFile).toHaveBeenCalledTimes(2);
         expect(result).toEqual({
-            msg: 'Los archivos se han sido subido exitosamente',
+            message: 'Uploaded successfully',
+            messageType: 'OK Request',
             statusCode: 201,
             length: 2,
         });

@@ -48,7 +48,7 @@ describe('SolutionService', () => {
 
         it('createIssue function error', async function () {
             const result = await issueService.createIssue(createIssueDto);
-            expect(result.errorCode).toContain("SERVINGSW01");
+            expect(result.errorMessage).toContain("Internal error.");
         });
     });
 
@@ -64,7 +64,7 @@ describe('SolutionService', () => {
 
         it('listIssue function error', async function () {
             const result = await issueService.listIssue();
-            expect(result.errorCode).toContain("SERVINGSW02");
+            expect(result.errorMessage).toContain("Internal error.");
         });
     });
 
@@ -80,7 +80,7 @@ describe('SolutionService', () => {
 
         it('detailIssue function error', async function () {
             const result = await issueService.detailIssue(issueId);
-            expect(result.errorCode).toContain("SERVINGSW09");
+            expect(result.errorMessage).toContain("Internal error.");
         });
     });
 
@@ -120,11 +120,9 @@ describe('SolutionService', () => {
             const response = await issueService.uploadIssueFile(fileName, dataBuffer, id);
 
             expect(response).toEqual({
-                statusCode: 400,
-                messageType: "Bad Request",
-                errorCode: "SERVINGSW26",
-                errorMessage: "ERROR issue",
-                detail: "ERROR uploadIssueFile function"
+                statusCode: 500,
+                messageType: "Error",
+                errorMessage: "Internal error.",
             });
         });
     });
@@ -133,7 +131,7 @@ describe('SolutionService', () => {
         it('should get the urls of a bucket', async () => {
             AWS.mock('S3', 'getSignedUrl', function (params: any, callback: any) {
                 return callback(null, {
-                    msg: "Retrieved successfully",
+                    message: "Retrieved successfully",
                 });
             });
         });

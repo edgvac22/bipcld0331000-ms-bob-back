@@ -1,0 +1,56 @@
+Description: Plantilla S3 prueba ingsw
+
+Parameters:
+
+    Stage:
+      Description: dev
+      Type: String
+
+    AccountIndicator:
+      Description: bob
+      Type: String
+
+    ApplicationName:
+      Description: Base de Conocimiento Banistmo
+      Type: String
+
+# valores actuales (pr=produccion, qa=calidad, qae=pre-produccion, dev=integracion desarrollo)
+
+Conditions:
+  AmbientePR: !Equals [ !Ref Stage, "pr" ]
+  AmbienteQA: !Equals [ !Ref Stage, "qa" ]
+  AmbienteQAE: !Equals [ !Ref Stage, "qae" ]
+  AmbienteINT: !Equals [ !Ref Stage, "dev" ]
+
+Resources:
+  S3BucketPlain:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "awsuseast1-${Stage}-${ApplicationName}"
+      AccessControl: BucketOwnerFullControl
+      PublicAccessBlockConfiguration:
+        BlockPublicPolicy: true
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules:
+        - ObjectOwnership: BucketOwnerPreferred
+      VersioningConfiguration:
+        Status: Suspended
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
+      # LifecycleConfiguration:
+      #    Rules:
+      #     - Id: S3GlacierRule
+      #       Status: Enabled
+      #       Prefix: !Sub "${ApplicationName}"
+      #       ExpirationInDays: '120'
+      #       Transitions:
+      #         - TransitionInDays: 60
+      #           StorageClass: GLACIER
+      #LoggingConfiguration: 
+        #DestinationBucketName: !Sub "awsuseast1-${Stage}${AccountIndicator}logs"
+        #LogFilePrefix: !Sub "awsuseast1-${Stage}${AccountIndicator}${Aplication}"

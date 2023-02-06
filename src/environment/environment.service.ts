@@ -25,11 +25,9 @@ export class EnvironmentService {
       };
     } catch (err) {
       return {
-        statusCode: 400,
-        messageType: "Bad Request",
-        errorCode: "SERVINGSW23",
-        errorMessage: "ERROR environment",
-        detail: "ERROR createEnvironment function"
+        statusCode: 500,
+        messageType: "Error",
+        errorMessage: "Internal error.",
       }
     }
   }
@@ -51,11 +49,9 @@ export class EnvironmentService {
 
     } catch (err) {
       return {
-        statusCode: 400,
-        messageType: "Bad Request",
-        errorCode: "SERVINGSW24",
-        errorMessage: "ERROR environment",
-        detail: "ERROR listEnvironment function"
+        statusCode: 500,
+        messageType: "Error",
+        errorMessage: "Internal error.",
       }
     }
   }

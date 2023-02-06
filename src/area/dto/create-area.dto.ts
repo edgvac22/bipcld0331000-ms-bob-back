@@ -1,11 +1,13 @@
 import { IsDefined, IsString } from "class-validator";
 
+let msg: 'Error introducing parameters.'
+
 export class CreateAreaDto {
     @IsDefined({
-        message: 'El campo nombre debe estar definido.'
+        message: msg
     })
     @IsString({
-        message: 'El campo nombre debe ser cadena o string.',
+        message: msg
     })
     name: string;
 }

@@ -1,38 +1,46 @@
-import { IsString, MinLength, IsDefined } from 'class-validator';
+import { IsString, MinLength, IsDefined, IsOptional } from 'class-validator';
+
+let msg: 'Error introducing parameters.'
 
 export class CreateIssueDto {
   @IsDefined({
-    message: 'El usuario que creo el Hallazgo debe estar definido.'
+    message: msg
   })
   @IsString({
-    message: 'El usuario que creo el Hallazgo debe ser cadena o string.',
+    message: msg
   })
   issueUser: string;
 
   @IsDefined({
-    message: 'El Área de TI debe estar definido.',
+    message: msg
   })
   @IsString({
-    message: 'El Área de TI debe ser cadena o string.',
+    message: msg
   })
   area: string;
 
   @IsDefined({
-    message: 'El ambiente de desarrollo debe estar definido.'
+    message: msg
   })
   @IsString({
-    message: 'El ambiente de desarrollo debe ser cadena o string.',
+    message: msg
   })
   environment: string;
 
   @IsDefined({
-    message: 'El detalle del Hallazgo debe estar definido.',
+    message: msg
   })
   @IsString({
-    message: 'El detalle del Hallazgo debe ser cadena o string.',
+    message: msg
   })
   @MinLength(21, {
-    message: 'El detalle del Hallazgo debe ser superior a 20 caracteres.',
+    message: msg
   })
   issueDetail: string;
+
+  @IsOptional()
+  @IsString({
+    message: msg
+  })
+  fileId: string;
 }

@@ -1,19 +1,21 @@
 import { IsString, MinLength } from 'class-validator';
 
+let msg: 'Error introducing parameters.'
+
 export class UpdateSolutionDto {
   @IsString({
-    message: 'El detalle de la Solución debe ser cadena o string.',
+    message: msg
   })
   @MinLength(6, {
-    message: 'El detalle de la Solución debe ser superior a 5 caracteres.',
+    message: msg
   })
   solutionTitle: string;
 
   @IsString({
-    message: 'El detalle de la Solución debe ser cadena o string.',
+    message: msg
   })
   @MinLength(21, {
-    message: 'El detalle de la Solución debe ser superior a 20 caracteres.',
+    message: msg
   })
   solutionDetail: string;
 }

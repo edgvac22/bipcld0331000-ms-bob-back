@@ -26,7 +26,7 @@ describe('EnvironmentService', () => {
 
     it('createEnvironment function error', async function () {
       const result = await environmentService.createEnvironment(createEnvironmentDto);
-      expect(result.errorCode).toContain("SERVINGSW23");
+      expect(result.errorMessage).toContain("Internal error.");
     });
   });
 
@@ -42,7 +42,7 @@ describe('EnvironmentService', () => {
 
     it('listEnvironment function error', async function () {
       const result = await environmentService.listEnvironment();
-      expect(result.errorCode).toContain("SERVINGSW24");
+      expect(result.errorMessage).toContain("Internal error.");
     });
   });
 });

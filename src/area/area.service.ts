@@ -26,11 +26,9 @@ export class AreaService {
       };
     } catch (err) {
       return {
-        statusCode: 400,
-        messageType: "Bad Request",
-        errorCode: "SERVINGSW21",
-        errorMessage: "ERROR area",
-        detail: "ERROR createArea function"
+        statusCode: 500,
+        messageType: "Error",
+        errorMessage: "Internal error.",
       }
     }
   }
@@ -52,11 +50,9 @@ export class AreaService {
 
     } catch (err) {
       return {
-        statusCode: 400,
-        messageType: "Bad Request",
-        errorCode: "SERVINGSW22",
-        errorMessage: "ERROR area",
-        detail: "ERROR listArea function"
+        statusCode: 500,
+        messageType: "Error",
+        errorMessage: "Internal error.",
       }
     }
   }

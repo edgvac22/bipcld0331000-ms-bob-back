@@ -58,8 +58,9 @@ export class SolutionController {
       fileArray.push(element.filename);
     }
     return {
-      msg: 'Los archivos se han sido subido exitosamente',
       statusCode: 201,
+      messageType: 'OK Request',
+      message: 'Uploaded successfully',
       length: fileArray.length,
     };
   }

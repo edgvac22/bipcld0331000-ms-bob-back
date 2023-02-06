@@ -28,11 +28,9 @@ export class IssueService {
       };
     } catch (err) {
       return {
-        statusCode: 400,
-        messageType: "Bad Request",
-        errorCode: "SERVINGSW01",
-        errorMessage: "ERROR issue",
-        detail: "ERROR createIssue function"
+        statusCode: 500,
+        messageType: "Error",
+        errorMessage: "Internal error.",
       }
     }
   }
@@ -53,11 +51,9 @@ export class IssueService {
       };
     } catch (err) {
       return {
-        statusCode: 400,
-        messageType: "Bad Request",
-        errorCode: "SERVINGSW02",
-        errorMessage: "ERROR issue",
-        detail: "ERROR listIssue function"
+        statusCode: 500,
+        messageType: "Error",
+        errorMessage: "Internal error.",
       }
     }
   }
@@ -74,11 +70,9 @@ export class IssueService {
       };
     } catch (err) {
       return {
-        statusCode: 400,
-        messageType: "Bad Request",
-        errorCode: "SERVINGSW09",
-        errorMessage: "ERROR issue",
-        detail: "ERROR getIssue function"
+        statusCode: 500,
+        messageType: "Error",
+        errorMessage: "Internal error.",
       }
     }
   }
@@ -102,16 +96,16 @@ export class IssueService {
         fileUrls.push(fileUrl);
       }
       return {
-        msg: 'Retrieved successfully',
+        statusCode: 200,
+        messageType: `OK Request`,
+        message: 'Retrieved successfully',
         fileUrls: fileUrls,
       }
     } catch (err) {
       return {
-        statusCode: 400,
-        messageType: "Bad Request",
-        errorCode: "SERVINGSW25",
-        errorMessage: "ERROR issue",
-        detail: "ERROR getIssueImages function"
+        statusCode: 500,
+        messageType: "Error",
+        errorMessage: "Internal error.",
       }
     }
   }
@@ -130,11 +124,9 @@ export class IssueService {
       }
     } catch (err) {
       return {
-        statusCode: 400,
-        messageType: "Bad Request",
-        errorCode: "SERVINGSW26",
-        errorMessage: "ERROR issue",
-        detail: "ERROR uploadIssueFile function"
+        statusCode: 500,
+        messageType: "Error",
+        errorMessage: "Internal error.",
       }
     }
   }

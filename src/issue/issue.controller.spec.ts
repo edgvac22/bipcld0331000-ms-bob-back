@@ -3,7 +3,6 @@ import { DatabaseService } from '../db/db.service';
 import { CreateIssueDto } from './dto/create-issue.dto';
 import { IssueController } from './issue.controller';
 import { IssueService } from './issue.service';
-import { v4 as uuid } from 'uuid';
 
 describe('AppController', () => {
     let issueController: IssueController;
@@ -73,10 +72,11 @@ describe('AppController', () => {
 
         expect(issueService.uploadIssueFile).toHaveBeenCalledTimes(2);
         expect(result).toEqual({
-            msg: 'Los archivos se han sido subido exitosamente',
+            message: 'Uploaded successfully.',
+            messageType: 'OK Request',
             statusCode: 201,
             length: 2,
-            idFile: expect.any(String),
+            fileId: expect.any(String),
         });
     });
 });

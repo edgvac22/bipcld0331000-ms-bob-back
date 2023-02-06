@@ -1,33 +1,35 @@
 import { IsString, MinLength, IsDefined } from 'class-validator';
 
+let msg: 'Error introducing parameters.'
+
 export class AddSolutionDto {
   @IsDefined({
-    message: 'El usuario que creo la Solución debe estar definido.'
+    message: msg
   })
   @IsString({
-    message: 'El usuario que creo la Solución debe ser cadena o string.',
+    message: msg
   })
   solutionUser: string;
 
   @IsDefined({
-    message: 'El título de la Solución debe estar definido.'
+    message: msg
   })
   @IsString({
-    message: 'El título de la Solución debe ser cadena o string.',
+    message: msg
   })
   @MinLength(6, {
-    message: 'El título de la Solución debe ser superior a 5 caracteres.',
+    message: msg
   })
   solutionTitle: string;
 
   @IsDefined({
-    message: 'El detalle de la Solución debe estar definido.'
+    message: msg
   })
   @IsString({
-    message: 'El detalle de la Solución debe ser cadena o string.',
+    message: msg
   })
   @MinLength(21, {
-    message: 'El detalle de la Solución debe ser superior a 20 caracteres.',
+    message: msg
   })
   solutionDetail: string;
 }

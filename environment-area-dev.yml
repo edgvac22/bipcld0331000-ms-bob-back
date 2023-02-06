@@ -3,11 +3,11 @@ Description: Diseno de Esquema de Base de Datos, Base de Conocimiento Banistmo (
 Parameters:
 
     Stage:
-      Description: desarrollo
+      Description: dev
       Type: String
 
     AccountIndicator:
-      Description: dev
+      Description: bob
       Type: String
 
 Conditions:
@@ -19,8 +19,8 @@ Conditions:
 Resources:
     DynamoDbTable:
       Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: awsuseast1-devcpidboingsw-environment-area
+      Properties: 
+        TableName: awsuseast1-${Stage}cpidboingsw-env-area-${AccountIndicator}
         AttributeDefinitions:
           - 
             AttributeName: id
@@ -37,6 +37,21 @@ Resources:
           PointInTimeRecoveryEnabled: !If [AmbientePR, True, !If [AmbienteQAE, false, !If [AmbienteQA, false, false]]]
         SSESpecification:
           SSEEnabled: true
+        Tags:
+          - Key: banistmo:application-code
+            Value: BIP-CLD-0331-000-BOB_BCK
+          - Key: banistmo:billing-mode
+            Value: unico
+          - Key: banistmo:pmo-id
+            Value: na
+          - Key: banistmo:project-name
+            Value: Base de Conocimiento Banistmo
+          - Key: banistmo:repository
+            Value: bipcld0331000-dbn-bob
+          - Key: banistmo:application-cc
+            Value: na
+          - Key: banistmo:project-cc
+            Value: na
         GlobalSecondaryIndexes : [
           {
           IndexName : "type-index",

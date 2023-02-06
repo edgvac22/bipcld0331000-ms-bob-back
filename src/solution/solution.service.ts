@@ -48,11 +48,9 @@ export class SolutionService {
             };
         } catch (err) {
             return {
-                statusCode: 400,
-                messageType: "Bad Request",
-                errorCode: "SERVINGSW04",
-                errorMessage: "ERROR solution",
-                detail: "ERROR addSolution function"
+                statusCode: 500,
+                messageType: "Error",
+                errorMessage: "Internal error.",
             }
         }
     }
@@ -73,11 +71,9 @@ export class SolutionService {
             };
         } catch (err) {
             return {
-                statusCode: 400,
-                messageType: "Bad Request",
-                errorCode: "SERVINGSW05",
-                errorMessage: "ERROR solution",
-                detail: "ERROR listSolution function"
+                statusCode: 500,
+                messageType: "Error",
+                errorMessage: "Internal error.",
             }
         }
     }
@@ -112,11 +108,9 @@ export class SolutionService {
             };
         } catch (err) {
             return {
-                statusCode: 400,
-                messageType: "Bad Request",
-                errorCode: "SERVINGSW06",
-                errorMessage: "ERROR solution",
-                detail: "ERROR updateSolution function"
+                statusCode: 500,
+                messageType: "Error",
+                errorMessage: "Internal error.",
             }
         }
     }
@@ -149,11 +143,9 @@ export class SolutionService {
             };
         } catch (err) {
             return {
-                statusCode: 400,
-                messageType: "Bad Request",
-                errorCode: "SERVINGSW07",
-                errorMessage: "ERROR solution",
-                detail: "ERROR removeSolution function"
+                statusCode: 500,
+                messageType: "Error",
+                errorMessage: "Internal error.",
             }
         }
     }
@@ -174,11 +166,9 @@ export class SolutionService {
             };
         } catch (err) {
             return {
-                statusCode: 400,
-                messageType: "Bad Request",
-                errorCode: "SERVINGSW08",
-                errorMessage: "ERROR solution",
-                detail: "ERROR detailSolution function"
+                statusCode: 500,
+                messageType: "Error",
+                errorMessage: "Internal error.",
             }
         }
     }
@@ -197,11 +187,9 @@ export class SolutionService {
             }
         } catch (err) {
             return {
-                statusCode: 400,
-                messageType: "Bad Request",
-                errorCode: "SERVINGSW27",
-                errorMessage: "ERROR solution",
-                detail: "ERROR uploadSolutionFile function"
+                statusCode: 500,
+                messageType: "Error",
+                errorMessage: "Internal error.",
             }
         }
     }
@@ -214,16 +202,16 @@ export class SolutionService {
         try {
             const countBucket = await this.s3.listObjects(params).promise();
             return {
-                msg: 'Retrieved successfully.',
+                statusCode: 201,
+                messageType: 'OK Request',
+                message: 'Retrieved successfully.',
                 length: countBucket.Contents.length - 1,
             }
         } catch (err) {
             return {
-                statusCode: 400,
-                messageType: "Bad Request",
-                errorCode: "SERVINGSW28",
-                errorMessage: "ERROR solution",
-                detail: "ERROR countSolutionBucket function"
+                statusCode: 500,
+                messageType: "Error",
+                errorMessage: "Internal error.",
             }
         }
     }
@@ -248,16 +236,16 @@ export class SolutionService {
                 fileUrls.push(fileUrl);
             }
             return {
-                msg: 'Retrieved successfully',
+                statusCode: 200,
+                messageType: 'OK Request',
+                message: 'Retrieved successfully',
                 fileUrls: fileUrls,
             }
         } catch (err) {
             return {
-                statusCode: 400,
-                messageType: "Bad Request",
-                errorCode: "SERVINGSW29",
-                errorMessage: "ERROR solution",
-                detail: "ERROR imageSolutionBucket function"
+                statusCode: 500,
+                messageType: "Error",
+                errorMessage: "Internal error.",
             }
         }
     }

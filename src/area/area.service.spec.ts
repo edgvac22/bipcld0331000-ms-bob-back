@@ -26,7 +26,7 @@ describe('AreaService', () => {
 
     it('createArea function error', async function () {
       const result = await areaService.createArea(createAreaDto);
-      expect(result.errorCode).toContain("SERVINGSW21");
+      expect(result.errorMessage).toContain("Internal error.");
     });
   });
 
@@ -42,7 +42,7 @@ describe('AreaService', () => {
 
     it('listArea function error', async function () {
       const result = await areaService.listArea();
-      expect(result.errorCode).toContain("SERVINGSW22");
+      expect(result.errorMessage).toContain("Internal error.");
     });
   });
 });
