@@ -1,0 +1,54 @@
+{
+ "templateId": {
+  "S": "ADS00001_hola"
+ },
+ "channel": {
+  "S": "ads"
+ },
+ "description": {
+  "M": {
+   "EN": {
+    "S": "hola"
+   },
+   "ES": {
+    "S": "hola"
+   }
+  }
+ },
+ "details": {
+  "L": [
+   {
+    "M": {
+     "body": {
+      "S": "Hola %user%"
+     },
+     "language": {
+      "S": "ES"
+     },
+     "parameters": {
+      "L": [
+       {
+        "S": "user"
+       }
+      ]
+     },
+     "type": {
+      "S": "SMS"
+     }
+    }
+   }
+  ]
+ },
+ "groupId": {
+  "S": "ADMINISTRATIVE"
+ },
+ "isMonetary": {
+  "BOOL": false
+ },
+ "mapPayload": {
+  "M": {}
+ },
+ "tag": {
+  "S": "TEST"
+ }
+}
